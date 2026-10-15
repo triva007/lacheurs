@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Vois qui ne te suit pas en retour sur Instagram et qui s'est désabonné. Sans mot de passe, sans appli, gratuit.">
+<meta name="theme-color" content="#15111B">
+<meta property="og:title" content="Lâcheurs · Qui t'a lâché sur Insta ?">
+<meta property="og:description" content="Vois qui ne te suit pas en retour, sans mot de passe. Gratuit.">
+<meta property="og:image" content="/media/og.jpg">
+<title>Lâcheurs · Qui t'a lâché sur Insta ?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one column, phone-first, dark-first. The hero is the big coral number; everything else stays quiet. */
+:root {
+  --bg: #15111B;
+  --surface: #1F1826;
+  --surface-2: #2A2134;
+  --line: #3A2F46;
+  --fg: #F5EFF8;
+  --muted: #A99CB8;
+  --accent: #FF6B7A;      /* lâcheurs, alertes */
+  --accent-ink: #1A0A0E;
+  --mint: #6EE7CF;        /* fans, positif */
+  --amber: #F6C86B;       /* en attente */
+  --blur: #6B5A7C;
+  --display: "Syne", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #FBF7FC; --surface: #FFFFFF; --surface-2: #F1EAF5; --line: #E2D8E9;
+    --fg: #1D1426; --muted: #6B5F78; --accent: #E6334A; --accent-ink: #FFFFFF;
+    --mint: #0E9F84; --amber: #B07A0E; --blur: #B9ACC6; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #FBF7FC; --surface: #FFFFFF; --surface-2: #F1EAF5; --line: #E2D8E9;
+  --fg: #1D1426; --muted: #6B5F78; --accent: #E6334A; --accent-ink: #FFFFFF;
+  --mint: #0E9F84; --amber: #B07A0E; --blur: #B9ACC6; color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px 48px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: clamp(34px, 9vw, 46px); }
+h2 { font-size: 26px; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+.stack { display: grid; gap: 12px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); font-weight: 600; text-decoration: none; min-height: 48px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-family: var(--display); font-weight: 800; font-size: 17px; }
+.btn.block { width: 100%; }
+.btn.ghost { background: transparent; }
+.btn.sm { padding: 8px 12px; min-height: 36px; border-radius: 10px; font-size: 14px; }
+.btn:focus-visible, input:focus-visible, .tab:focus-visible, .check:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+input[type=text], input[type=email] { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; }
+header.top { display: flex; align-items: center; justify-content: space-between; padding-block: 6px 18px; }
+.brand { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.brand .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent); }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; border: 1px solid var(--line); background: var(--surface); }
+.pill.mint { color: var(--mint); border-color: color-mix(in oklab, var(--mint) 40%, transparent); }
+.pill.accent { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 40%, transparent); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+.view { display: none; }
+.view.active { display: block; }
+
+/* Landing */
+.hero2 { position: relative; border-radius: 24px; overflow: hidden; background: var(--surface); min-height: 520px; display: grid; align-items: end; isolation: isolate; }
+.hero2 .media { position: absolute; inset: 0; z-index: -1; }
+.hero2 video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero2 video:not([data-ok]) { display: none; }
+.media-fallback { position: absolute; inset: 0; background: radial-gradient(120% 80% at 70% 20%, color-mix(in oklab, var(--accent) 55%, transparent), transparent 60%), linear-gradient(180deg, var(--surface-2), var(--surface)); overflow: hidden; }
+.media-fallback .ghost { position: absolute; border-radius: 999px; background: var(--blur); filter: blur(18px); opacity: .55; animation: drift 9s ease-in-out infinite alternate; }
+.ghost.g1 { width: 180px; height: 48px; left: 12%; top: 18%; }
+.ghost.g2 { width: 140px; height: 48px; left: 48%; top: 34%; animation-delay: -3s; }
+.ghost.g3 { width: 200px; height: 48px; left: 20%; top: 50%; animation-delay: -6s; }
+@keyframes drift { from { transform: translateY(0) } to { transform: translateY(-18px) } }
+.hero2-text { padding: 24px 18px 20px; background: linear-gradient(to top, var(--bg) 55%, transparent); display: grid; gap: 14px; }
+h1.giant { font-size: clamp(54px, 17vw, 84px); letter-spacing: -0.04em; line-height: .95; }
+.hero2 .lead { font-size: 18px; max-width: 30ch; }
+.btn.xl { font-size: 19px; min-height: 58px; border-radius: 18px; }
+.trust { display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 600; color: var(--muted); }
+.trust span { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.fomo { margin-top: 28px; padding: 22px 18px; border-radius: 24px; background: var(--accent); color: var(--accent-ink); display: grid; gap: 12px; }
+.fomo-big { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 7.5vw, 34px); line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance; }
+.fomo-sub { font-size: 16px; opacity: .9; max-width: 36ch; }
+.demo-card { margin-top: 6px; background: var(--bg); color: var(--fg); border-radius: 18px; padding: 12px; display: grid; gap: 8px; }
+.demo-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 600; padding: 0 4px; }
+.demo-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--surface); }
+.demo-row .av { width: 32px; height: 32px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 14px; flex: none; }
+.demo-row b { display: block; font-size: 15px; }
+.demo-row small { color: var(--muted); font-size: 12px; }
+.demo-row.locked .av { background: var(--blur); }
+.demo-row.locked .bar { display: block; width: 120px; height: 11px; border-radius: 6px; background: var(--blur); filter: blur(3px); }
+.demo-row.locked .bar.s { width: 70px; height: 8px; margin-top: 6px; opacity: .6; }
+.how, .see, .safe, .pricing { margin-top: 36px; display: grid; gap: 14px; }
+.how-grid { display: grid; gap: 10px; }
+.how-step { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 12px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.how-step .ico { grid-row: 1 / span 2; width: 44px; height: 44px; border-radius: 14px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 20px; }
+.how-step b { font-size: 16px; }
+.how-step p { color: var(--muted); font-size: 14px; }
+.see-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.see-tile { border-radius: 16px; padding: 16px 14px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 2px; }
+.see-tile b { font-family: var(--display); font-size: 40px; line-height: 1; letter-spacing: -0.03em; }
+.see-tile span { font-size: 13px; color: var(--muted); }
+.see-tile.accent b { color: var(--accent); } .see-tile.mint b { color: var(--mint); } .see-tile.amber b { color: var(--amber); }
+.visual { margin: 0; border-radius: 20px; overflow: hidden; } .visual img { display: block; width: 100%; }
+.safe { padding: 20px 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.safe p { color: var(--muted); }
+.faq { margin-top: 36px; }
+.faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+.faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::after { content: "+"; color: var(--muted); flex: none; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { margin-top: 8px; color: var(--muted); }
+.price-grid { display: grid; gap: 10px; }
+.plan { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); text-decoration: none; color: inherit; }
+.plan.best { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.plan b { font-family: var(--display); font-size: 18px; }
+.plan .tag { font-size: 12px; color: var(--accent); font-weight: 700; }
+footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: grid; gap: 8px; }
+footer .links { display: flex; flex-wrap: wrap; gap: 12px; }
+footer button { background: none; border: 0; color: var(--muted); padding: 0; text-decoration: underline; font-size: 13px; }
+@media (min-width: 600px) { .hero2 { min-height: 600px; } .how-grid { grid-template-columns: repeat(3, 1fr); } .how-step { grid-template-columns: 1fr; grid-template-rows: auto auto auto; row-gap: 8px; } .how-step .ico { grid-row: auto; } }
+
+/* Import */
+.drop { border: 2px dashed var(--line); border-radius: 18px; padding: 28px 18px; text-align: center; display: grid; gap: 10px; background: var(--surface); }
+.drop.over { border-color: var(--mint); background: color-mix(in oklab, var(--mint) 8%, var(--surface)); }
+.drop input { display: none; }
+.guide { display: grid; gap: 14px; }
+.guide .shot { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; font-size: 14px; display: grid; gap: 6px; }
+.guide .shot .ui { background: var(--bg); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line); }
+.guide .shot .ui.on { border-color: var(--mint); }
+.guide .shot .ui .chk { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); }
+.guide .shot .ui.on .chk { background: var(--mint); border-color: var(--mint); }
+.progress { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.progress i { display: block; height: 100%; width: 0; background: var(--mint); transition: width .3s; }
+.err { background: color-mix(in oklab, var(--accent) 14%, var(--surface)); border: 1px solid var(--accent); border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+
+/* Dashboard */
+.dash-head { display: grid; gap: 6px; padding-block: 4px 14px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 14px; text-align: left; color: inherit; display: grid; gap: 2px; }
+.tile b { font-family: var(--display); font-size: 30px; line-height: 1; letter-spacing: -0.02em; }
+.tile span { font-size: 13px; color: var(--muted); }
+.tile.accent b { color: var(--accent); }
+.tile.mint b { color: var(--mint); }
+.tile.amber b { color: var(--amber); }
+.tile.active { border-color: var(--fg); }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-block: 14px 10px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { white-space: nowrap; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font-weight: 600; font-size: 14px; }
+.tab.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.list { display: grid; gap: 6px; }
+.person { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); min-width: 0; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-family: var(--display); font-weight: 800; flex: none; }
+.person .who { flex: 1; min-width: 0; }
+.person .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.person .who span { font-size: 13px; color: var(--muted); }
+.person a.open { font-size: 13px; text-decoration: none; padding: 6px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); flex: none; }
+.person.locked .avatar { background: var(--blur); color: transparent; }
+.person.locked .bar { height: 12px; border-radius: 6px; background: var(--blur); filter: blur(3px); opacity: .9; }
+.person.locked .bar.s { width: 40%; height: 9px; margin-top: 6px; opacity: .6; }
+.lock-cta { position: relative; margin-top: -70px; padding-top: 70px; background: linear-gradient(to bottom, transparent, var(--bg) 60%); display: grid; gap: 10px; text-align: center; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.filters button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; }
+.filters button.on { background: var(--surface-2); color: var(--fg); }
+.empty { text-align: center; padding: 28px 16px; color: var(--muted); display: grid; gap: 10px; }
+.check { width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--line); background: transparent; flex: none; display: grid; place-items: center; color: var(--bg); }
+.check.on { background: var(--mint); border-color: var(--mint); }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-size: 11px; font-family: var(--body); }
+.score { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; }
+.ring { width: 96px; height: 96px; }
+.share-preview { width: 100%; max-width: 270px; border-radius: 16px; border: 1px solid var(--line); display: block; margin: 0 auto; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px; }
+.kv b { font-family: var(--body); font-weight: 600; }
+.badge-ok { color: var(--mint); font-weight: 600; }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; z-index: 50; max-width: calc(100% - 32px); }
+
+/* Modal */
+.modal { position: fixed; inset: 0; background: rgba(10,6,14,.72); z-index: 40; display: none; align-items: flex-end; justify-content: center; padding: 0; }
+.modal.open { display: flex; }
+.sheet { background: var(--bg); border: 1px solid var(--line); border-radius: 22px 22px 0 0; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px calc(24px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.sheet .handle { width: 42px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 4px; }
+.sheet h2 { font-size: 24px; }
+.legal { font-size: 14px; color: var(--muted); display: grid; gap: 10px; }
+.legal h3 { color: var(--fg); margin-top: 8px; }
+.todo { background: color-mix(in oklab, var(--amber) 18%, var(--surface)); border: 1px dashed var(--amber); border-radius: 8px; padding: 2px 6px; color: var(--fg); font-weight: 600; }
+label.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted); }
+label.consent input { margin-top: 4px; }
+@media (min-width: 600px) { .modal { align-items: center; padding: 16px; } .sheet { border-radius: 22px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#" id="brandLink"><span class="dot"></span>Lâcheurs</a>
+    <div class="row" id="topRight"><span class="pill" id="premiumPill" hidden>Premium</span><button class="btn sm ghost" id="btnMyData" hidden>Mes imports</button></div>
+  </header>
+
+  <!-- ===== LANDING ===== -->
+  <section class="view active" id="viewLanding">
+    <div class="hero2">
+      <div class="media">
+        <video id="heroVideo" autoplay muted loop playsinline poster="media/hero.jpg" aria-hidden="true"><source src="media/hero.mp4" type="video/mp4"></video>
+        <div class="media-fallback" aria-hidden="true"><div class="ghost g1"></div><div class="ghost g2"></div><div class="ghost g3"></div></div>
+      </div>
+      <div class="hero2-text">
+        <h1 class="giant">Qui t'a lâché&nbsp;?</h1>
+        <p class="lead">Vois qui ne te suit pas en retour sur Insta, et qui s'est désabonné. Sans ton mot de passe. Gratuit.</p>
+        <button class="btn primary block xl" id="ctaStart">Voir mes lâcheurs</button>
+        <div class="trust"><span>0 mot de passe</span><span>0 risque de ban</span><span>2 min</span></div>
+      </div>
+    </div>
+
+    <div class="fomo">
+      <p class="fomo-big">Chaque jour, des gens se désabonnent en silence.</p>
+      <p class="fomo-sub">Insta ne te dira jamais qui. Tant que tu n'as pas pris ta première photo de ta liste, tu ne le sauras jamais.</p>
+      <div class="demo-card" aria-label="Exemple de résultat">
+        <div class="demo-head"><span>Exemple</span><span class="num">aujourd'hui</span></div>
+        <div class="demo-row"><span class="av">L</span><div><b>@lea.m•••</b><small>t'a lâché il y a 2 jours</small></div></div>
+        <div class="demo-row"><span class="av">T</span><div><b>@tom_d•••</b><small>t'a lâché il y a 5 jours</small></div></div>
+        <div class="demo-row"><span class="av">H</span><div><b>@hugo.v•••</b><small>ne t'a jamais suivi en retour</small></div></div>
+        <div class="demo-row locked"><span class="av"></span><div><b class="bar"></b><small class="bar s"></small></div></div>
+        <div class="demo-row locked"><span class="av"></span><div><b class="bar"></b><small class="bar s"></small></div></div>
+      </div>
+    </div>
+
+    <div class="how">
+      <h2>3 étapes, 2 minutes</h2>
+      <div class="how-grid">
+        <div class="how-step"><div class="ico">1</div><b>Tu demandes ton fichier à Insta</b><p>Un bouton t'emmène au bon endroit. Tu coches une case.</p></div>
+        <div class="how-step"><div class="ico">2</div><b>Tu le déposes ici</b><p>Il reste dans ton téléphone. Personne d'autre ne le voit.</p></div>
+        <div class="how-step"><div class="ico">3</div><b>Tu vois tout</b><p>Qui ne te suit pas en retour, tes fans, qui t'a lâché.</p></div>
+      </div>
+      <button class="btn primary block xl" data-go="viewImport">Commencer</button>
+    </div>
+
+    <div class="see">
+      <h2>Ce que tu vas voir</h2>
+      <div class="see-grid">
+        <div class="see-tile accent"><b class="num">16</b><span>ne te suivent pas en retour</span></div>
+        <div class="see-tile accent"><b class="num">6</b><span>t'ont lâché ce mois-ci</span></div>
+        <div class="see-tile mint"><b class="num">4</b><span>fans qui te suivent sans retour</span></div>
+        <div class="see-tile amber"><b class="num">1</b><span>ne t'a jamais accepté</span></div>
+      </div>
+      <p class="small muted">Chiffres d'exemple. Les tiens arrivent en 2 minutes.</p>
+      <figure class="visual"><img src="media/visual.jpg" alt="" loading="lazy" onerror="this.parentElement.hidden=true"></figure>
+    </div>
+
+    <div class="safe">
+      <h2>Pourquoi c'est sans risque</h2>
+      <p>Les applis « unfollowers » te demandent ton mot de passe Insta. Insta le voit, et peut bloquer ton compte. Ici, zéro mot de passe : tu utilises le bouton officiel « Télécharger vos informations », et le fichier est lu sur ton téléphone. Rien n'est envoyé nulle part.</p>
+    </div>
+
+    <div class="pricing">
+      <h2>Gratuit pour commencer</h2>
+      <p class="muted">Tes chiffres, 3 noms par liste, ta courbe et ta carte à partager : gratuit. Premium pour tous les noms, le nettoyage guidé et la comparaison entre imports.</p>
+      <div class="price-grid" id="landingPlans"></div>
+    </div>
+
+    <div class="faq stack">
+      <h2>Questions</h2>
+      <details><summary>Insta peut bloquer mon compte ?</summary><p>Non. Tu utilises uniquement l'export officiel de tes données, prévu par Instagram. Aucune connexion automatique, aucun mot de passe.</p></details>
+      <details><summary>Pourquoi je ne vois pas tout de suite qui s'est désabonné ?</summary><p>Instagram ne garde pas cette liste, et aucun outil au monde ne peut la retrouver. Lâcheurs compare deux fichiers pris à des dates différentes. Si tu as déjà téléchargé tes données un jour, dépose l'ancien fichier avec le nouveau : tu vois tout de suite qui est parti. Sinon, ton premier import sert de point de départ.</p></details>
+      <details><summary>Où vont mes données ?</summary><p>Nulle part. Le fichier est lu dans ton navigateur et tes listes restent dans la mémoire de ton téléphone. Garde tes fichiers Instagram dans tes emails : tu pourras toujours les redéposer ensemble.</p></details>
+      <details><summary>Insta met combien de temps à envoyer le fichier ?</summary><p>Souvent quelques minutes, parfois quelques heures. Tu reçois un email quand c'est prêt.</p></details>
+    </div>
+
+    <footer>
+      <div class="links"><button data-legal="mentions">Mentions légales</button><button data-legal="cgv">CGV</button><button data-legal="confidentialite">Confidentialité</button><button data-legal="retractation">Renoncer au contrat ici</button><button data-legal="resiliation">Résilier votre contrat</button></div>
+      <p>Lâcheurs est un outil indépendant. Il n'est ni affilié ni approuvé par Instagram ou Meta.</p>
+    </footer>
+  </section>
+
+  <!-- ===== IMPORT ===== -->
+  <section class="view" id="viewImport">
+    <div class="stack">
+      <h2>Récupère ton fichier Instagram</h2>
+      <p class="muted">Deux minutes, et tu le fais une seule fois par analyse.</p>
+      <div class="guide">
+        <div class="shot">
+          <b>1. Ouvre la page de téléchargement</b>
+          <p class="muted">Ce bouton ouvre directement la page officielle d'Instagram (connecte-toi si besoin).</p>
+          <a class="btn primary" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">Ouvrir la page Instagram</a>
+          <p class="muted small">Si le bouton ne s'ouvre pas : dans l'appli Instagram, Profil → ≡ → Espace Comptes → Vos informations et autorisations → Télécharger vos informations.</p>
+        </div>
+        <div class="shot">
+          <b>2. Choisis exactement ceci</b>
+          <div class="ui"><span>Télécharger ou transférer des informations</span><span class="chk on"></span></div>
+          <div class="ui"><span>Ton compte Instagram</span><span class="chk on"></span></div>
+          <div class="ui on"><span>Certaines de vos informations → <b>Abonnés et abonnements</b></span><span class="chk"></span></div>
+          <div class="ui on"><span>Télécharger sur l'appareil</span><span class="chk"></span></div>
+          <div class="ui on"><span>Période : <b>Depuis le début</b> · Format : <b>JSON</b></span><span class="chk"></span></div>
+          <p class="muted">Puis « Créer les fichiers ». Garde cet onglet ouvert : Instagram t'envoie un email quand c'est prêt, souvent en quelques minutes. Tu télécharges le fichier depuis cette même page.</p>
+        </div>
+        <div class="shot">
+          <b>3. Dépose le fichier ici</b>
+          <p class="muted">Un fichier .zip du type « instagram-tonpseudo-2026-10-15-xxxx.zip ». Pas besoin de le décompresser. Tu as un ancien export dans tes emails ? Dépose les deux fichiers ensemble pour voir qui t'a lâché entre les deux.</p>
+        </div>
+      </div>
+      <label class="drop" id="drop">
+        <input type="file" id="fileInput" accept=".zip,.json,.html,application/zip,application/json,text/html" multiple>
+        <b>Déposer le fichier ou appuyer ici</b>
+        <span class="muted small">Un ou plusieurs .zip Instagram, ou les fichiers followers / following</span>
+        <div class="progress" id="prog" hidden><i></i></div>
+        <div id="progText" class="muted small" hidden></div>
+      </label>
+      <div class="err" id="importErr" hidden></div>
+      <button class="btn ghost block" id="btnDemo">Voir une démo avec un compte fictif</button>
+      <p class="small muted">Rappel : Lâcheurs ne demande jamais ton mot de passe. Si un site ou une appli te le demande pour « voir qui t'a unfollow », ferme-le.</p>
+    </div>
+  </section>
+
+  <!-- ===== DASHBOARD ===== -->
+  <section class="view" id="viewDash">
+    <div class="dash-head">
+      <div class="row" style="justify-content:space-between"><span class="pill" id="acctPill">@compte</span><span class="small muted" id="snapInfo"></span></div>
+      <div id="demoBanner" class="err" hidden>Compte fictif pour la démo. Dépose ton vrai fichier pour voir tes chiffres.</div>
+    </div>
+    <div class="tiles">
+      <button class="tile accent" data-tab="lacheurs"><b class="num" id="tLacheurs">0</b><span>t'ont lâché</span></button>
+      <button class="tile accent" data-tab="sansretour"><b class="num" id="tSansRetour">0</b><span>ne te suivent pas en retour</span></button>
+      <button class="tile mint" data-tab="fans"><b class="num" id="tFans">0</b><span>fans (te suivent sans retour)</span></button>
+      <button class="tile amber" data-tab="jamais"><b class="num" id="tJamais">0</b><span>ne t'ont jamais accepté</span></button>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="lacheurs">Lâcheurs</button>
+      <button class="tab" data-tab="sansretour">Sans retour</button>
+      <button class="tab" data-tab="fans">Fans</button>
+      <button class="tab" data-tab="jamais">Jamais acceptés</button>
+      <button class="tab" data-tab="historique">Courbe</button>
+      <button class="tab" data-tab="nettoyage">Nettoyage</button>
+      <button class="tab" data-tab="partage">Partager</button>
+    </div>
+    <div id="panel" class="stack"></div>
+    <div class="stack" style="margin-top:24px">
+      <button class="btn block" id="btnReimport">Importer un nouveau fichier</button>
+      <p class="small muted" style="text-align:center">Garde ce fichier dans tes emails. Dans 30 jours, dépose-le avec un nouveau pour voir qui t'a lâché entre-temps. <button class="btn sm ghost" id="btnRemind">Me le rappeler</button></p>
+    </div>
+    <footer>
+      <div class="links"><button data-legal="mentions">Mentions légales</button><button data-legal="cgv">CGV</button><button data-legal="confidentialite">Confidentialité</button><button data-legal="retractation">Renoncer au contrat ici</button><button data-legal="resiliation">Résilier votre contrat</button><button id="btnWipe">Effacer mes données</button></div>
+    </footer>
+  </section>
+</div>
+
+<!-- ===== PAYWALL ===== -->
+<div class="modal" id="paywall" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+  <div class="sheet">
+    <div class="handle"></div>
+    <h2 id="pwTitle">Débloque toutes tes listes</h2>
+    <p class="muted" id="pwSub">Le nettoyage guidé pour te désabonner en un tap, tous les noms de chaque liste, la comparaison entre tes imports et la carte sans filigrane.</p>
+    <div class="price-grid" id="pwPlans"></div>
+    <label class="consent"><input type="checkbox" id="consent"><span>Je demande que le service commence immédiatement et je reconnais perdre mon droit de rétractation de 14 jours une fois le contenu débloqué.</span></label>
+    <p class="small muted">Paiement sécurisé (carte, Apple Pay, Google Pay). Abonnement renouvelé automatiquement, résiliable en ligne en 3 clics. Prix TTC.</p>
+    <div class="stack">
+      <p class="small"><b>Déjà abonné ?</b> Colle la clé reçue par email.</p>
+      <div class="row"><input type="text" id="licenseKey" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" autocomplete="off" style="flex:1;min-width:0"><button class="btn sm" id="btnActivate">Activer</button></div>
+      <div class="small muted" id="activateMsg"></div>
+    </div>
+    <button class="btn ghost block" id="pwClose">Rester en gratuit</button>
+  </div>
+</div>
+
+<!-- ===== LEGAL / INFO SHEET ===== -->
+<div class="modal" id="sheetModal" role="dialog" aria-modal="true">
+  <div class="sheet"><div class="handle"></div><div id="sheetBody" class="stack"></div><button class="btn block" id="sheetClose">Fermer</button></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* ===================== CONFIG (à remplir avant le lancement) ===================== */
+const CONFIG = {
+  brand: 'Lâcheurs',
+  domain: 'lacheurs.fr',
+  contactEmail: 'contact@lacheurs.fr',          // À REMPLACER par l'adresse réelle
+  checkout: {                                     // URLs de paiement Lemon Squeezy (à coller)
+    hebdo:  { label: 'Hebdo', price: '4,99 €', per: '/ semaine', url: '' },
+    mensuel:{ label: 'Mensuel', price: '7,99 €', per: '/ mois', url: '' },
+    annuel: { label: 'Annuel', price: '29,99 €', per: '/ an', url: '', tag: 'Meilleur prix' },
+  },
+  customerPortal: '',                             // URL du portail client Lemon Squeezy (résiliation en ligne)
+  licenseActivateUrl: 'https://api.lemonsqueezy.com/v1/licenses/activate',
+  licenseValidateUrl: 'https://api.lemonsqueezy.com/v1/licenses/validate',
+  cfAnalyticsToken: '',                           // jeton Cloudflare Web Analytics (gratuit, sans cookie)
+  previewHash: '#apercu-premium',                 // À SUPPRIMER avant le lancement : aperçu Premium pour la relecture
+  freeNames: 3,
+  maxSnapshots: 12,
+};
+/* ================================================================================ */
+
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const state = { account: null, data: null, premium: false, tab: 'lacheurs', period: 30, demo: false, snapshots: [], currentDate: null, currentDay: null };
+
+/* ---------- utils ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+  keys() { try { return Object.keys(localStorage); } catch { return []; } },
+};
+const fmtDate = ts => new Date(ts).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+const fmtDateShort = ts => new Date(ts).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+const plural = (n, s, p) => n + ' ' + (n > 1 ? p : s);
+const daysAgo = ts => Math.round((Date.now() - ts) / 86400000);
+const since = ts => { const d = daysAgo(ts); if (d < 1) return "aujourd'hui"; if (d < 30) return `il y a ${plural(d, 'jour', 'jours')}`; if (d < 365) return `il y a ${plural(Math.round(d / 30), 'mois', 'mois')}`; return `il y a ${plural(Math.round(d / 365), 'an', 'ans')}`; };
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
+function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---------- parsing ---------- */
+// Instagram JSON: entries like { string_list_data: [{ href, value, timestamp }] }
+function entriesFromJson(obj) {
+  const out = [];
+  const walk = (v) => {
+    if (Array.isArray(v)) { v.forEach(walk); return; }
+    if (v && typeof v === 'object') {
+      if (Array.isArray(v.string_list_data) && v.string_list_data.length) {
+        const s = v.string_list_data[0];
+        const name = (s.value || (s.href || '').split('instagram.com/')[1] || '').replace(/\/$/, '').trim();
+        if (name) out.push({ name, ts: s.timestamp ? s.timestamp * 1000 : null });
+        return;
+      }
+      if (typeof v.title === 'string' && v.title && !v.string_list_data && Array.isArray(v.media_list_data)) { /* rare shape */ }
+      Object.values(v).forEach(walk);
+    }
+  };
+  walk(obj);
+  return out;
+}
+// Instagram HTML export: <a href="https://www.instagram.com/username">username</a>
+function entriesFromHtml(html) {
+  const out = []; const seen = new Set();
+  const re = /instagram\.com\/([A-Za-z0-9._]+)\/?"/g; let m;
+  while ((m = re.exec(html))) { const n = m[1]; if (n && !seen.has(n) && !['_u', 'accounts', 'explore', 'p', 'reel'].includes(n)) { seen.add(n); out.push({ name: n, ts: null }); } }
+  return out;
+}
+function classify(path) {
+  const p = path.toLowerCase().replace(/\\/g, '/'); const f = p.split('/').pop();
+  if (/^followers(_\d+)?\.(json|html)$/.test(f)) return 'followers';
+  if (/^following\.(json|html)$/.test(f)) return 'following';
+  if (/^pending_follow_requests\.(json|html)$/.test(f)) return 'pending';
+  if (/^recently_unfollowed_profiles\.(json|html)$/.test(f)) return 'youUnfollowed';
+  if (/^personal_information\.json$/.test(f) && p.includes('personal_information')) return 'profile';
+  return null;
+}
+const MAX_ZIP_BYTES = 150 * 1024 * 1024;
+const isZip = f => /\.zip$/i.test(f.name) || f.type === 'application/zip' || f.type === 'application/x-zip-compressed';
+// Date de l'export : Instagram nomme le zip « instagram-pseudo-AAAA-MM-JJ-xxxx.zip ».
+function exportDate(file) {
+  const m = /(\d{4})-(\d{2})-(\d{2})/.exec(file.name);
+  if (m) { const d = new Date(+m[1], +m[2] - 1, +m[3], 12); if (!isNaN(d) && d.getTime() < Date.now() + 86400000) return d.getTime(); }
+  return file.lastModified && file.lastModified < Date.now() - 86400000 ? file.lastModified : Date.now();
+}
+// Chaque zip = un export daté. Les fichiers isolés (json/html) forment un seul export daté d'aujourd'hui.
+async function readAll(fileList) {
+  const zips = fileList.filter(isZip), loose = fileList.filter(f => !isZip(f));
+  const big = zips.find(z => z.size > MAX_ZIP_BYTES);
+  if (big) throw new Error('TOO_BIG');
+  const exports = [];
+  for (const z of zips) exports.push({ date: exportDate(z), buckets: await readFiles([z]) });
+  if (loose.length) exports.push({ date: Date.now(), buckets: await readFiles(loose) });
+  return exports.filter(e => e.buckets.followers.length || e.buckets.following.length).sort((a, b) => a.date - b.date);
+}
+async function readFiles(fileList) {
+  const buckets = { followers: [], following: [], pending: [], youUnfollowed: [], username: null, hasJson: false };
+  const texts = []; // {kind, text, isJson}
+  let n = 0;
+  for (const file of fileList) {
+    if (isZip(file)) {
+      const zip = await JSZip.loadAsync(file);
+      const items = Object.values(zip.files).filter(z => !z.dir);
+      for (const z of items) {
+        const kind = classify(z.name); if (!kind) continue;
+        texts.push({ kind, text: await z.async('string'), isJson: /\.json$/i.test(z.name) });
+        setProgress(++n / Math.max(1, items.length));
+      }
+    } else {
+      const kind = classify(file.name) || (/\.json$/i.test(file.name) ? 'guess' : null);
+      if (kind) texts.push({ kind, text: await file.text(), isJson: /\.json$/i.test(file.name) });
+    }
+  }
+  for (const t of texts) {
+    let kind = t.kind;
+    let entries;
+    if (t.isJson) {
+      let obj; try { obj = JSON.parse(t.text); } catch { continue; }
+      if (kind === 'profile') { try { const pi = obj.profile_user?.[0]?.string_map_data || {}; buckets.username = pi.Username?.value || pi["Nom d'utilisateur"]?.value || null; } catch {} continue; }
+      if (kind === 'guess') { if (obj.relationships_following) kind = 'following'; else if (obj.relationships_follow_requests_sent) kind = 'pending'; else if (obj.relationships_unfollowed_users) kind = 'youUnfollowed'; else if (Array.isArray(obj)) kind = 'followers'; else continue; }
+      entries = entriesFromJson(obj); buckets.hasJson = true;
+    } else { if (kind === 'guess' || kind === 'profile') continue; entries = entriesFromHtml(t.text); }
+    buckets[kind].push(...entries);
+  }
+  return buckets;
+}
+function setProgress(p) { const el = $('#prog'); el.hidden = false; el.firstElementChild.style.width = Math.round(p * 100) + '%'; }
+
+/* ---------- analysis ---------- */
+function analyze(b) {
+  const dedupe = arr => { const m = new Map(); arr.forEach(e => { if (!m.has(e.name)) m.set(e.name, e); }); return m; };
+  const followers = dedupe(b.followers), following = dedupe(b.following), pending = dedupe(b.pending);
+  const sansRetour = [...following.values()].filter(e => !followers.has(e.name)).sort((a, b) => (a.ts || 0) - (b.ts || 0)); // tu les suis depuis le plus longtemps d'abord
+  const fans = [...followers.values()].filter(e => !following.has(e.name)).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  const mutuals = [...followers.values()].filter(e => following.has(e.name)).length;
+  const jamais = [...pending.values()].sort((a, b) => (a.ts || 0) - (b.ts || 0));
+  const now = Date.now();
+  const newFollowers30 = [...followers.values()].filter(e => e.ts && now - e.ts < 30 * 86400000).length;
+  const reciprocity = following.size ? Math.round(100 * mutuals / following.size) : null;
+  return { followers, following, pending, sansRetour, fans, mutuals, jamais, newFollowers30, reciprocity, hasDates: b.hasJson && [...followers.values()].some(e => e.ts) };
+}
+function snapshotKey(acct) { return 'lacheurs:snap:' + (acct || 'moncompte'); }
+function loadSnapshots(acct) { return store.get(snapshotKey(acct), []); }
+const dayOf = ts => new Date(ts).toISOString().slice(0, 10);
+function saveSnapshot(acct, a, date = Date.now()) {
+  const snaps = loadSnapshots(acct);
+  const snap = { date, day: dayOf(date), followers: [...a.followers.keys()], following: [...a.following.keys()] };
+  const idx = snaps.findIndex(s => s.day === snap.day);
+  if (idx >= 0) snaps[idx] = snap; else snaps.push(snap);
+  snaps.sort((x, y) => x.date - y.date);
+  while (snaps.length > CONFIG.maxSnapshots) snaps.shift();
+  const ok = store.set(snapshotKey(acct), snaps);
+  if (!ok && snaps.length > 2) { snaps.splice(0, snaps.length - 2); store.set(snapshotKey(acct), snaps); }
+  return snaps;
+}
+// Lâcheurs = présents dans l'import de référence, absents de l'import courant. Référence = import le plus récent vieux d'au moins `period` jours, sinon le plus ancien.
+function computeLacheurs(a, snaps, period) {
+  const prior = snaps.filter(s => s.day !== state.currentDay);
+  if (!prior.length) return { list: [], baseline: null, exact: false };
+  const cutoff = (state.currentDate || Date.now()) - period * 86400000;
+  const older = prior.filter(s => s.date <= cutoff);
+  const baseline = older.length ? older[older.length - 1] : prior[0];
+  const list = baseline.followers.filter(n => !a.followers.has(n)).map(n => ({ name: n, ts: null, wasFollowing: baseline.following.includes(n) }));
+  return { list, baseline, exact: older.length > 0 };
+}
+
+/* ---------- rendering ---------- */
+// Lien de paiement + code affilié (lacheurs.fr/?aff=prenom → Lemon Squeezy Affiliate Hub)
+function checkoutUrl(p) {
+  if (!p.url) return '#';
+  const aff = store.get('lacheurs:aff', null);
+  return aff ? p.url + (p.url.includes('?') ? '&' : '?') + 'aff=' + encodeURIComponent(aff) : p.url;
+}
+function renderPlans(container) {
+  container.innerHTML = Object.entries(CONFIG.checkout).map(([k, p]) => `
+    <a class="plan ${p.tag ? 'best' : ''}" href="${checkoutUrl(p)}" data-plan="${k}" ${p.url ? 'target="_blank" rel="noopener"' : ''}>
+      <div><b>${p.label}</b>${p.tag ? ` <span class="tag">${p.tag}</span>` : ''}</div>
+      <div class="num"><b>${p.price}</b> <span class="muted small">${p.per}</span></div>
+    </a>`).join('');
+}
+function personRow(e, opts = {}) {
+  const initial = esc(e.name[0] || '?').toUpperCase();
+  const sub = opts.sub ? `<span>${esc(opts.sub)}</span>` : '';
+  return `<div class="person"><div class="avatar">${initial}</div><div class="who"><b>@${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="open" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">Voir</a></div>`;
+}
+function lockedRow(i) { const w = 45 + ((i * 37) % 40); return `<div class="person locked"><div class="avatar">·</div><div class="who"><div class="bar" style="width:${w}%"></div><div class="bar s"></div></div></div>`; }
+function renderList(items, subFn, emptyMsg, extra = () => ({})) {
+  if (!items.length) return `<div class="empty"><b>${emptyMsg}</b></div>`;
+  const free = state.premium ? items : items.slice(0, CONFIG.freeNames);
+  let html = `<div class="list">${free.map(e => personRow(e, { sub: subFn(e), ...extra(e) })).join('')}`;
+  if (!state.premium && items.length > CONFIG.freeNames) {
+    const rest = items.length - CONFIG.freeNames;
+    html += Array.from({ length: Math.min(rest, 4) }, (_, i) => lockedRow(i)).join('');
+    html += `</div><div class="lock-cta"><p><b>${plural(rest, 'autre nom caché', 'autres noms cachés')}</b></p><button class="btn primary block" data-open-paywall>Voir tous les noms</button></div>`;
+  } else html += '</div>';
+  return html;
+}
+function renderPanel() {
+  const a = state.data; const panel = $('#panel'); const tab = state.tab;
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  $$('.tile').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  const notes = {};
+  if (tab === 'lacheurs') {
+    const r = computeLacheurs(a, state.snapshots, state.period);
+    const filters = `<div class="filters">${[7, 30, 90].map(p => `<button class="${state.period === p ? 'on' : ''}" data-period="${p}">${p} jours</button>`).join('')}</div>`;
+    let head;
+    if (!r.baseline) head = `<div class="card stack"><h3>Ta liste d'abonnés est enregistrée.</h3><p class="muted">Instagram ne garde pas la trace des désabonnements, donc personne ne peut te montrer le passé. À partir de maintenant, Lâcheurs compare chaque nouvel import avec celui-ci. Tu as déjà téléchargé tes données un jour ? Dépose cet ancien fichier avec celui-ci : tu verras tout de suite qui est parti. Sinon, reviens dans quelques semaines avec un nouveau fichier.</p><button class="btn block" id="btnRemind2">Me rappeler dans 30 jours</button></div>`;
+    else head = `<p class="small muted">${r.exact ? `Comparé à ton import du ${fmtDate(r.baseline.date)}.` : `Ton import le plus ancien date du ${fmtDate(r.baseline.date)} (${since(r.baseline.date)}), la comparaison se fait depuis cette date.`}</p>`;
+    panel.innerHTML = filters + head + (r.baseline ? renderList(r.list, e => e.wasFollowing ? 'Tu le suivais aussi' : 'Il ne te suivait pas en retour', 'Personne ne t\'a lâché sur cette période.') : '');
+  } else if (tab === 'sansretour') {
+    panel.innerHTML = `<p class="small muted">Tu les suis, ils ne te suivent pas. Les plus anciens en premier.</p>` + renderList(a.sansRetour, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : '', 'Tout le monde te suit en retour.');
+  } else if (tab === 'fans') {
+    panel.innerHTML = `<p class="small muted">Ils te suivent, tu ne les suis pas. Les plus récents en premier.</p>` + renderList(a.fans, e => e.ts ? `Te suit depuis ${since(e.ts)}` : '', 'Pas de fan pour l\'instant.');
+  } else if (tab === 'jamais') {
+    panel.innerHTML = `<p class="small muted">Tu as demandé à les suivre, ils n'ont jamais accepté.</p>` + renderList(a.jamais, e => e.ts ? `Demande envoyée ${since(e.ts)}` : '', 'Aucune demande en attente.');
+  } else if (tab === 'historique') {
+    panel.innerHTML = renderHistory(a);
+  } else if (tab === 'nettoyage') {
+    const done = store.get('lacheurs:done:' + state.account, {});
+    const items = a.sansRetour;
+    const remaining = items.filter(e => !done[e.name]).length;
+    const intro = `<div class="card stack"><h3>Nettoyage guidé</h3><p class="muted">« Voir » ouvre le profil dans Instagram. Tu te désabonnes toi-même, puis tu coches. Lâcheurs ne fait jamais d'action à ta place : c'est ce qui protège ton compte.</p><p class="small"><b class="num">${remaining}</b> <span class="muted">restants sur ${items.length}</span></p></div>`;
+    panel.innerHTML = intro + (state.premium ? renderList(items, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : '', 'Rien à nettoyer.', e => ({ check: true, done: !!done[e.name] })) : renderList(items, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : '', 'Rien à nettoyer.', () => ({ check: true })));
+  } else if (tab === 'partage') {
+    panel.innerHTML = renderShare(a);
+    drawShareCard(a);
+  }
+}
+function renderHistory(a) {
+  const total = a.followers.size;
+  if (!a.hasDates) return `<div class="empty"><b>Pas de dates dans ce fichier.</b><p>Instagram met les dates uniquement dans le format JSON. Refais un export en choisissant JSON pour voir ta courbe.</p></div>`;
+  const pts = [...a.followers.values()].filter(e => e.ts).map(e => e.ts).sort((x, y) => x - y);
+  const first = pts[0], last = Date.now();
+  const W = 520, H = 200, px = 36, py = 18;
+  const n = 40; const step = (last - first) / n || 1;
+  const series = []; let j = 0;
+  for (let i = 0; i <= n; i++) { const t = first + i * step; while (j < pts.length && pts[j] <= t) j++; series.push({ t, v: j }); }
+  const max = Math.max(1, total);
+  const x = t => px + (t - first) / (last - first || 1) * (W - px - 8);
+  const y = v => H - py - v / max * (H - py * 2);
+  const path = series.map((p, i) => (i ? 'L' : 'M') + x(p.t).toFixed(1) + ' ' + y(p.v).toFixed(1)).join(' ');
+  const area = path + ` L${x(last).toFixed(1)} ${y(0)} L${x(first).toFixed(1)} ${y(0)} Z`;
+  const ticks = [0, 0.5, 1].map(f => ({ v: Math.round(max * f), y: y(max * f) }));
+  const xt = [first, first + (last - first) / 2, last];
+  const years = Math.max(1, Math.round(daysAgo(first) / 365));
+  const score = a.reciprocity;
+  const ring = score == null ? '' : `<div class="card score"><svg class="ring" viewBox="0 0 96 96" aria-label="Réciprocité ${score} sur 100"><circle cx="48" cy="48" r="40" fill="none" stroke="var(--surface-2)" stroke-width="10"/><circle cx="48" cy="48" r="40" fill="none" stroke="var(--mint)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(251.3 * score / 100).toFixed(1)} 251.3" transform="rotate(-90 48 48)"/><text x="48" y="54" text-anchor="middle" style="font-size:22px;font-family:var(--display);font-weight:800;fill:var(--fg)">${score}</text></svg><div><h3>Réciprocité ${score} %</h3><p class="muted small">${a.mutuals} des ${a.following.size} comptes que tu suis te suivent aussi. ${score >= 70 ? 'Solide.' : score >= 40 ? 'Moyen : beaucoup ne te rendent pas la pareille.' : 'Faible : tu suis surtout des comptes qui ne te suivent pas.'}</p></div></div>`;
+  return `<div class="card stack">
+    <div><h3>${total.toLocaleString('fr-FR')} abonnés aujourd'hui</h3><p class="muted small">D'après la date à laquelle chacun de tes abonnés actuels t'a suivi. Premier abonné : ${fmtDate(first)}. ${a.newFollowers30 ? `<b class="badge-ok">+${a.newFollowers30}</b> sur les 30 derniers jours.` : 'Aucun nouvel abonné sur les 30 derniers jours.'}</p></div>
+    <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe du nombre d'abonnés dans le temps">
+      ${ticks.map(t => `<line x1="${px}" x2="${W - 8}" y1="${t.y.toFixed(1)}" y2="${t.y.toFixed(1)}" stroke="var(--line)" stroke-width="1"/><text x="${px - 6}" y="${(t.y + 4).toFixed(1)}" text-anchor="end">${t.v.toLocaleString('fr-FR')}</text>`).join('')}
+      <path d="${area}" fill="var(--mint)" opacity=".18"/>
+      <path d="${path}" fill="none" stroke="var(--mint)" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="${x(last).toFixed(1)}" cy="${y(total).toFixed(1)}" r="5" fill="var(--mint)" stroke="var(--surface)" stroke-width="2"/>
+      ${xt.map((t, i) => `<text x="${x(t).toFixed(1)}" y="${H - 2}" text-anchor="${i === 0 ? 'start' : i === 2 ? 'end' : 'middle'}">${years > 1 ? new Date(t).getFullYear() : fmtDateShort(t)}</text>`).join('')}
+    </svg>
+  </div>${ring}`;
+}
+function renderShare(a) {
+  return `<div class="card stack"><h3>Ta carte à partager</h3><p class="muted small">Uniquement tes chiffres, jamais les noms. Format story. ${state.premium ? '' : 'Sans le badge Premium, la carte porte le filigrane « gratuit ».'}</p><canvas id="shareCanvas" width="1080" height="1920" class="share-preview"></canvas><div class="row"><button class="btn" id="btnCopyImg">Copier l'image</button><a class="btn" id="btnDlImg" download="lacheurs.png" href="#">Télécharger</a></div><p class="small muted">Sur téléphone, le plus simple reste une capture d'écran de la carte.</p></div>`;
+}
+function drawShareCard(a) {
+  const c = $('#shareCanvas'); if (!c) return; const ctx = c.getContext('2d');
+  const r = computeLacheurs(a, state.snapshots, state.period);
+  ctx.fillStyle = '#15111B'; ctx.fillRect(0, 0, 1080, 1920);
+  const g = ctx.createRadialGradient(540, 500, 50, 540, 500, 900); g.addColorStop(0, 'rgba(255,107,122,.25)'); g.addColorStop(1, 'rgba(255,107,122,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1920);
+  ctx.fillStyle = '#F5EFF8'; ctx.font = '700 44px "DM Sans", Arial, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Mon bilan Instagram', 540, 260);
+  const rows = [
+    [r.baseline ? r.list.length : null, "m'ont lâché", '#FF6B7A'],
+    [a.sansRetour.length, 'ne me suivent pas en retour', '#FF6B7A'],
+    [a.fans.length, 'me suivent sans retour', '#6EE7CF'],
+    [a.jamais.length, "ne m'ont jamais accepté", '#F6C86B'],
+  ].filter(x => x[0] != null);
+  let yy = 520;
+  rows.forEach(([n, label, col]) => {
+    ctx.fillStyle = col; ctx.font = '800 170px "Syne", "Arial Black", sans-serif'; ctx.textAlign = 'left'; ctx.fillText(String(n), 110, yy);
+    ctx.fillStyle = '#F5EFF8'; ctx.font = '600 46px "DM Sans", Arial, sans-serif'; ctx.fillText(label, 110, yy + 70);
+    yy += 320;
+  });
+  ctx.textAlign = 'center'; ctx.fillStyle = '#A99CB8'; ctx.font = '500 38px "DM Sans", Arial, sans-serif';
+  ctx.fillText(state.premium ? 'Analysé sans mot de passe' : 'Version gratuite · analysé sans mot de passe', 540, 1700);
+  ctx.fillStyle = '#F5EFF8'; ctx.font = '800 64px "Syne", "Arial Black", sans-serif'; ctx.fillText(CONFIG.domain, 540, 1790);
+  ctx.fillStyle = '#FF6B7A'; ctx.beginPath(); ctx.arc(540 - ctx.measureText(CONFIG.domain).width / 2 - 40, 1770, 16, 0, Math.PI * 2); ctx.fill();
+  const dl = $('#btnDlImg'); if (dl) { try { dl.href = c.toDataURL('image/png'); } catch {} }
+}
+
+/* ---------- dashboard flow ---------- */
+function openDashboard(exports, demo = false) {
+  if (!exports.length) { showImportError("Je n'ai trouvé ni abonnés ni abonnements dans ce fichier. Vérifie que tu as bien coché « Abonnés et abonnements » dans Instagram, puis dépose le .zip reçu."); return; }
+  const latest = exports[exports.length - 1];
+  const a = analyze(latest.buckets);
+  state.data = a; state.demo = demo; state.account = (latest.buckets.username || exports.find(e => e.buckets.username)?.buckets.username || (demo ? 'demo' : 'moncompte')).toLowerCase();
+  state.currentDate = latest.date; state.currentDay = dayOf(latest.date);
+  if (demo) state.snapshots = demoSnapshots(a);
+  else { exports.slice(0, -1).forEach(e => saveSnapshot(state.account, analyze(e.buckets), e.date)); state.snapshots = saveSnapshot(state.account, a, latest.date); }
+  $('#acctPill').textContent = '@' + state.account;
+  $('#demoBanner').hidden = !demo;
+  const prior = state.snapshots.filter(s => s.day !== state.currentDay);
+  const when = daysAgo(latest.date) > 0 ? ` · export du ${fmtDate(latest.date)}` : '';
+  $('#snapInfo').textContent = (prior.length ? `${plural(prior.length, 'import précédent', 'imports précédents')}` : 'Premier import') + when;
+  const r = computeLacheurs(a, state.snapshots, state.period);
+  $('#tLacheurs').textContent = r.baseline ? r.list.length : '–';
+  $('#tSansRetour').textContent = a.sansRetour.length;
+  $('#tFans').textContent = a.fans.length;
+  $('#tJamais').textContent = a.jamais.length;
+  $('#btnMyData').hidden = false;
+  state.tab = r.baseline && r.list.length ? 'lacheurs' : 'sansretour';
+  show('viewDash'); renderPanel();
+}
+function showImportError(msg) { const e = $('#importErr'); e.textContent = msg; e.hidden = false; $('#prog').hidden = true; }
+async function handleFiles(files) {
+  $('#importErr').hidden = true; setProgress(0.05); $('#progText').hidden = false; $('#progText').textContent = 'Lecture du fichier…';
+  try { const ex = await readAll(files); setProgress(1); openDashboard(ex); }
+  catch (err) {
+    if (err && err.message === 'TOO_BIG') showImportError('Ce fichier est très lourd : tu as sûrement coché « Toutes les informations ». Refais la demande à Instagram en cochant uniquement « Abonnés et abonnements » (étape 2).');
+    else showImportError("Impossible de lire ce fichier. Dépose le .zip reçu d'Instagram tel quel, sans le renommer. (" + (err && err.message ? err.message : 'erreur inconnue') + ')');
+  }
+  finally { $('#prog').hidden = true; $('#progText').hidden = true; }
+}
+
+/* ---------- demo data ---------- */
+function demoBuckets() {
+  const names = ['lea.mrtn', 'tom_dlc', 'ines.bkr', 'hugo.vlt', 'chloe.dsn', 'nathan.rz', 'manon_lp', 'enzo.grd', 'camille.fvr', 'lucas.bnt', 'emma.prt', 'louis.mrc', 'jade.rbt', 'arthur.lmb', 'lina.dpt', 'raph.cst', 'zoe.ndr', 'mael.bgn', 'sarah.vdl', 'theo.msn', 'anais.crt', 'yanis.hbb', 'maeva.jln', 'noah.frn', 'lou.gtr', 'sacha.blm', 'alice.mnr', 'gabriel.pch', 'eva.lcr', 'adam.srk'];
+  const now = Date.now(), d = 86400000;
+  const followers = names.slice(0, 22).map((n, i) => ({ name: n, ts: now - (i * 41 + 3) * d }));
+  const following = [...names.slice(4, 26), 'studio.pixel', 'clara.ftg', 'ryad.mks', 'oceane.bld', 'mathis.tr'].map((n, i) => ({ name: n, ts: now - (i * 37 + 10) * d }));
+  const pending = [{ name: 'kenza.official', ts: now - 120 * d }, { name: 'ilan.rmx', ts: now - 44 * d }];
+  return { followers, following, pending, youUnfollowed: [], username: 'demo', hasJson: true };
+}
+function demoSnapshots(a) {
+  const d = 86400000; const f = [...a.followers.keys()];
+  return [{ date: Date.now() - 38 * d, day: dayOf(Date.now() - 38 * d), followers: [...f, 'julie.amr', 'bastien.kl', 'nour.esh', 'tim.rvl'], following: [...a.following.keys(), 'julie.amr', 'nour.esh'] }];
+}
+
+/* ---------- premium ---------- */
+function setPremium(on, persist = true) {
+  state.premium = on; $('#premiumPill').hidden = !on;
+  if (persist) store.set('lacheurs:premium', on ? { on: true, at: Date.now() } : null);
+  if (state.data) renderPanel();
+}
+async function activateLicense(key) {
+  const msg = $('#activateMsg'); msg.textContent = 'Vérification…';
+  if (!/^[A-F0-9-]{20,}$/i.test(key)) { msg.textContent = 'Cette clé ne ressemble pas à une clé valide. Vérifie l\'email reçu après ton paiement.'; return; }
+  try {
+    const body = new URLSearchParams({ license_key: key, instance_name: 'lacheurs-' + (state.account || 'web') });
+    const res = await fetch(CONFIG.licenseActivateUrl, { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+    const j = await res.json();
+    if (j.activated || j.valid) { store.set('lacheurs:license', { key, instance: j.instance?.id || null, checked: Date.now() }); setPremium(true); msg.textContent = 'Premium activé.'; closePaywall(); toast('Premium activé'); }
+    else msg.textContent = j.error || 'Clé refusée. Vérifie qu\'elle est bien copiée en entier.';
+  } catch { msg.textContent = 'Impossible de vérifier la clé pour le moment. Réessaie dans une minute.'; }
+}
+// À chaque ouverture : la clé est revérifiée (abonnement résilié ou expiré → retour en gratuit). Sans réseau, on garde l'état 7 jours maximum.
+async function recheckLicense() {
+  const lic = store.get('lacheurs:license', null); if (!lic || !lic.key) return;
+  try {
+    const body = new URLSearchParams({ license_key: lic.key }); if (lic.instance) body.set('instance_id', lic.instance);
+    const res = await fetch(CONFIG.licenseValidateUrl, { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+    const j = await res.json();
+    const status = j.license_key?.status;
+    const ok = j.valid === true && (!status || status === 'active');
+    if (ok) { lic.checked = Date.now(); store.set('lacheurs:license', lic); setPremium(true); }
+    else { store.del('lacheurs:license'); setPremium(false); toast('Ton abonnement Premium est terminé'); }
+  } catch {
+    if (lic.checked && Date.now() - lic.checked > 7 * 86400000) { setPremium(false); }
+  }
+}
+function openPaywall() { if (state.premium) return; $('#paywall').classList.add('open'); $('#consent').checked = false; syncConsent(); }
+function closePaywall() { $('#paywall').classList.remove('open'); }
+function syncConsent() { const ok = $('#consent').checked; $$('#pwPlans .plan').forEach(p => { p.style.opacity = ok ? '1' : '.45'; p.style.pointerEvents = ok ? 'auto' : 'none'; }); }
+
+/* ---------- reminder ---------- */
+function reminder() {
+  const dt = new Date(Date.now() + 30 * 86400000); dt.setHours(19, 0, 0, 0);
+  const fmt = x => x.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const start = fmt(dt), end = fmt(new Date(dt.getTime() + 1800000));
+  const text = encodeURIComponent('Refaire mon import Lâcheurs'); const details = encodeURIComponent('Demande ton fichier à Instagram, puis dépose-le sur ' + CONFIG.domain + ' pour voir qui t\'a lâché depuis le dernier import.');
+  const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}`;
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Lacheurs//FR', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@lacheurs', 'DTSTAMP:' + fmt(new Date()), 'DTSTART:' + start, 'DTEND:' + end, 'SUMMARY:Refaire mon import Lâcheurs', 'DESCRIPTION:' + decodeURIComponent(details), 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+  openSheet(`<h2>Rappel dans 30 jours</h2><p class="muted">Le ${dt.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} à 19 h : refaire l'import pour voir qui t'a lâché entre-temps.</p><a class="btn primary block" href="${gcal}" target="_blank" rel="noopener">Ajouter à Google Agenda</a><a class="btn block" href="${href}" download="rappel-lacheurs.ics">Ajouter à Apple Calendrier / autre</a>`);
+}
+
+/* ---------- sheets (legal) ---------- */
+function openSheet(html) { $('#sheetBody').innerHTML = html; $('#sheetModal').classList.add('open'); }
+function closeSheet() { $('#sheetModal').classList.remove('open'); }
+const LEGAL = {
+  mentions: `<h2>Mentions légales</h2><div class="legal">
+    <p>Éditeur : Aaron Boukaia, entrepreneur individuel, SIRET 106 951 197 00024, <span class="todo">[adresse du siège]</span>. Directeur de la publication : Aaron Boukaia. Contact : ${CONFIG.contactEmail}.</p>
+    <p>Hébergement : Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.</p>
+    <p>Lâcheurs est un service indépendant, sans lien avec Instagram ou Meta Platforms. « Instagram » est une marque de Meta Platforms, Inc., citée uniquement pour décrire la compatibilité du service.</p>
+    <p>Médiateur de la consommation : <span class="todo">[nom et site du médiateur]</span>.</p></div>`,
+  cgv: `<h2>Conditions générales de vente</h2><div class="legal">
+    <h3>Le service</h3><p>Lâcheurs analyse, dans ton navigateur, le fichier d'export que tu as téléchargé depuis Instagram. La version gratuite affiche tes chiffres, les ${CONFIG.freeNames} premiers noms de chaque liste, ta courbe d'abonnés et ta carte à partager avec filigrane. Premium débloque le nettoyage guidé, toutes les listes, la comparaison entre imports et la carte sans filigrane.</p>
+    <h3>Prix et paiement</h3><p>Hebdo ${CONFIG.checkout.hebdo.price} par semaine, Mensuel ${CONFIG.checkout.mensuel.price} par mois, Annuel ${CONFIG.checkout.annuel.price} par an, TTC. Le paiement est encaissé par notre prestataire de paiement, qui émet la facture. L'abonnement se renouvelle automatiquement à la période choisie jusqu'à résiliation.</p>
+    <h3>Rétractation</h3><p>Tu disposes de 14 jours pour te rétracter. En demandant l'accès immédiat au contenu Premium, tu acceptes que l'exécution commence tout de suite et tu renonces à ce droit pour la période entamée. Pour te rétracter avant, utilise le bouton « Renoncer au contrat ici » en bas de page.</p>
+    <h3>Résiliation</h3><p>Tu peux résilier à tout moment, en ligne, depuis « Résilier votre contrat ». La résiliation prend effet à la fin de la période payée.</p>
+    <h3>Limites</h3><p>Lâcheurs ne peut pas afficher les désabonnements antérieurs à ton premier import : Instagram ne fournit pas cette information. Les résultats dépendent du fichier fourni par Instagram.</p>
+    <p class="todo">[À faire relire : médiateur, loi applicable, garanties légales.]</p></div>`,
+  confidentialite: `<h2>Confidentialité</h2><div class="legal">
+    <p><b class="badge-ok">Ton fichier Instagram n'est jamais envoyé sur un serveur.</b> Il est lu par ton navigateur, sur ton appareil. Les listes d'abonnés sont conservées dans la mémoire locale de ton navigateur pour permettre la comparaison entre deux imports. Tu peux tout effacer avec « Effacer mes données ».</p>
+    <p>Les pseudos des comptes qui apparaissent dans tes listes sont des données personnelles de tiers. Elles restent sur ton appareil et ne sont jamais transmises à Lâcheurs.</p>
+    <p>Lors d'un achat Premium, le prestataire de paiement collecte ton email et tes informations de paiement, selon sa propre politique. Lâcheurs reçoit uniquement une clé d'activation. Lors de l'activation, cette clé est vérifiée auprès du prestataire : aucune donnée Instagram n'est transmise.</p>
+    <p>Mesure d'audience : <span class="todo">[aucune / outil utilisé, sans cookie]</span>.</p>
+    <p>Responsable du traitement et contact : ${CONFIG.contactEmail}. Tu peux demander l'accès ou la suppression de tes données liées à ton achat, et saisir la CNIL.</p></div>`,
+  retractation: `<h2>Renoncer au contrat ici</h2><div class="legal">
+    <p>Pour te rétracter dans les 14 jours suivant ton achat (si tu n'as pas encore débloqué le contenu Premium), envoie ce message à <b>${CONFIG.contactEmail}</b> :</p>
+    <div class="card small" id="retractText">Je souhaite me rétracter de mon abonnement Lâcheurs. Email utilisé pour l'achat : [ton email]. Date de l'achat : [date].</div>
+    <button class="btn sm" id="btnCopyRetract">Copier le message</button>
+    <p>Tu recevras un accusé de réception par email. <span class="todo">[À relier à un formulaire avec accusé automatique avant le lancement.]</span></p></div>`,
+  resiliation: `<h2>Résilier votre contrat</h2><div class="legal">
+    <p>Résiliation en ligne, en 3 clics : ouvre ton espace de paiement, choisis l'abonnement, confirme. Tu reçois une confirmation par email et tu gardes l'accès jusqu'à la fin de la période payée.</p>
+    ${CONFIG.customerPortal ? `<a class="btn primary block" href="${CONFIG.customerPortal}" target="_blank" rel="noopener">Ouvrir mon espace de paiement</a>` : `<p class="todo">[Lien vers le portail client du prestataire de paiement à ajouter.]</p>`}
+    <p>Si ça bloque : écris à ${CONFIG.contactEmail} avec l'email de ton achat.</p></div>`,
+  imports: () => {
+    const snaps = state.account ? loadSnapshots(state.account) : [];
+    return `<h2>Mes imports</h2><div class="legal"><p>Compte : @${esc(state.account || '')}. ${state.premium ? 'Tous tes imports sont conservés.' : 'Gratuit : les imports sont conservés pour la comparaison.'}</p>
+    ${snaps.length ? `<div class="kv">${snaps.slice().reverse().map(s => `<span>${fmtDate(s.date)}</span><b class="num">${s.followers.length.toLocaleString('fr-FR')} abonnés · ${s.following.length.toLocaleString('fr-FR')} abonnements</b>`).join('')}</div>` : '<p>Aucun import enregistré.</p>'}</div>`;
+  },
+};
+
+/* ---------- events ---------- */
+document.addEventListener('click', (ev) => {
+  const t = ev.target.closest('button, a'); if (!t) return;
+  if (t.id === 'ctaStart' || t.id === 'btnReimport' || t.dataset.go === 'viewImport') { show('viewImport'); return; }
+  if (t.id === 'brandLink') { ev.preventDefault(); show(state.data ? 'viewDash' : 'viewLanding'); return; }
+  if (t.id === 'btnDemo') { openDashboard([{ date: Date.now(), buckets: demoBuckets() }], true); return; }
+  if (t.dataset.tab) { state.tab = t.dataset.tab; renderPanel(); $('#panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (t.dataset.period) { state.period = +t.dataset.period; renderPanel(); return; }
+  if (t.hasAttribute('data-open-paywall')) { openPaywall(); return; }
+  if (t.id === 'pwClose') { closePaywall(); return; }
+  if (t.id === 'sheetClose') { closeSheet(); return; }
+  if (t.id === 'btnActivate') { activateLicense($('#licenseKey').value.trim()); return; }
+  if (t.dataset.legal) { openSheet(LEGAL[t.dataset.legal]); return; }
+  if (t.id === 'btnMyData') { openSheet(LEGAL.imports()); return; }
+  if (t.id === 'btnRemind' || t.id === 'btnRemind2') { reminder(); return; }
+  if (t.id === 'btnWipe') { store.keys().filter(k => k.startsWith('lacheurs:') && !['lacheurs:license', 'lacheurs:premium', 'lacheurs:aff'].includes(k)).forEach(k => store.del(k)); state.data = null; state.snapshots = []; toast('Imports effacés' + (state.premium ? ', Premium conservé' : '')); show('viewLanding'); $('#btnMyData').hidden = true; return; }
+  if (t.dataset.done != null) { if (!state.premium) { openPaywall(); return; } const k = 'lacheurs:done:' + state.account; const d = store.get(k, {}); d[t.dataset.done] = !d[t.dataset.done]; store.set(k, d); renderPanel(); return; }
+  if (t.id === 'btnCopyImg') { const c = $('#shareCanvas'); c.toBlob(async blob => { try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); toast('Image copiée'); } catch { toast('Copie impossible ici : fais une capture d\'écran'); } }); return; }
+  if (t.id === 'btnCopyRetract') { const txt = $('#retractText').textContent; navigator.clipboard.writeText(txt).then(() => toast('Message copié')).catch(() => { const r = document.createRange(); r.selectNodeContents($('#retractText')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }); return; }
+  if (t.classList.contains('plan') && t.closest('#landingPlans')) { ev.preventDefault(); openPaywall(); return; }
+  if (t.classList.contains('plan') && !t.getAttribute('href').startsWith('http')) { ev.preventDefault(); toast('Paiement bientôt disponible'); return; }
+});
+$('#consent').addEventListener('change', syncConsent);
+$('#fileInput').addEventListener('change', e => { if (e.target.files.length) handleFiles([...e.target.files]); e.target.value = ''; });
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { const files = [...e.dataTransfer.files]; if (files.length) handleFiles(files); });
+$$('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePaywall(); closeSheet(); } });
+
+/* ---------- boot ---------- */
+(function boot() {
+  const hv = $('#heroVideo'); if (hv) { hv.addEventListener('loadeddata', () => hv.setAttribute('data-ok', '1')); hv.addEventListener('error', () => hv.removeAttribute('data-ok'), true); }
+  renderPlans($('#landingPlans')); renderPlans($('#pwPlans')); syncConsent();
+  try { const aff = new URLSearchParams(location.search).get('aff') || new URLSearchParams(location.search).get('ref'); if (aff) { store.set('lacheurs:aff', aff.slice(0, 40)); renderPlans($('#landingPlans')); renderPlans($('#pwPlans')); } } catch {}
+  const lic = store.get('lacheurs:license', null); const prem = store.get('lacheurs:premium', null);
+  if (lic && prem && prem.on) { setPremium(true, false); recheckLicense(); }
+  if (CONFIG.previewHash && location.hash === CONFIG.previewHash) setPremium(true, false);
+  if (CONFIG.cfAnalyticsToken) { const s = document.createElement('script'); s.defer = true; s.src = 'https://static.cloudflareinsights.com/beacon.min.js'; s.setAttribute('data-cf-beacon', JSON.stringify({ token: CONFIG.cfAnalyticsToken })); document.body.appendChild(s); }
+  const keys = store.keys().filter(k => k.startsWith('lacheurs:snap:')); if (keys.length) $('#btnMyData').hidden = false;
+})();
+</script>
+
+</body>
+</html>
