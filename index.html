@@ -12,44 +12,43 @@
 <title>Lâcheurs · Ils t'ont unfollow en scred</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap">
 <style>
-/* Layout : grammaire visuelle d'une liste d'abonnés (avatar rond, pseudo gras, pastille à droite), thème clair, police système, une colonne. */
+/* Système : grammaire d'Instagram (blanc, bleu #0095F6, gris #8E8E8E, séparateurs #DBDBDB, anneau story), grille 8 px, rayons 8/12/16, police système. Une colonne, mobile d'abord. */
 :root {
-  --bg: #FFFFFF;
-  --surface: #FFFFFF;
-  --surface-2: #EFEFEF;
-  --line: #DBDBDB;
-  --fg: #262626;
-  --muted: #8E8E8E;
-  --blue: #0095F6;
-  --blue-ink: #FFFFFF;
-  --accent: #ED4956;      /* rouge notification, lâcheurs */
-  --ring: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7); /* anneau story — V1 test, à retirer avant mise en ligne */
-  --green: #1DA462;       /* fans, positif */
-  --amber: #C98A00;       /* en attente */
-  --blur: #C7C7C7;
+  --bg: #FFFFFF; --bg-2: #FAFAFA; --surface: #FFFFFF; --surface-2: #EFEFEF; --line: #DBDBDB;
+  --fg: #262626; --muted: #8E8E8E;
+  --blue: #0095F6; --blue-dark: #1877F2; --blue-ink: #FFFFFF;
+  --accent: #ED4956; --green: #1DA462; --amber: #C98A00; --blur: #C7C7C7;
+  --ring: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7);
+  --ring-conic: conic-gradient(from var(--a, 0deg), #F9CE34, #EE2A7B, #6228D7, #F9CE34);
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 12px 32px -16px rgba(0,0,0,.25);
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(.2,.8,.2,1);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #000000; --surface: #000000; --surface-2: #262626; --line: #262626;
-    --fg: #F5F5F5; --muted: #A8A8A8; --blue: #0095F6; --blue-ink: #FFFFFF;
-    --accent: #FF4D6D; --green: #3DD68C; --amber: #F0B429; --blur: #4A4A4A; color-scheme: dark;
+    --bg: #000000; --bg-2: #0A0A0A; --surface: #000000; --surface-2: #262626; --line: #262626;
+    --fg: #F5F5F5; --muted: #A8A8A8; --blue: #0095F6; --blue-dark: #3BA7F8; --blue-ink: #FFFFFF;
+    --accent: #FF4D6D; --green: #3DD68C; --amber: #F0B429; --blur: #3A3A3A;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.8); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #000000; --surface: #000000; --surface-2: #262626; --line: #262626;
-  --fg: #F5F5F5; --muted: #A8A8A8; --blue: #0095F6; --blue-ink: #FFFFFF;
-  --accent: #FF4D6D; --green: #3DD68C; --amber: #F0B429; --blur: #4A4A4A; color-scheme: dark;
+  --bg: #000000; --bg-2: #0A0A0A; --surface: #000000; --surface-2: #262626; --line: #262626;
+  --fg: #F5F5F5; --muted: #A8A8A8; --blue: #0095F6; --blue-dark: #3BA7F8; --blue-ink: #FFFFFF;
+  --accent: #FF4D6D; --green: #3DD68C; --amber: #F0B429; --blur: #3A3A3A;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.8); color-scheme: dark;
 }
+@property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { height: 100%; }
+html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.wrap { max-width: 520px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px 48px; }
-h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; letter-spacing: -0.02em; font-weight: 800; }
-h1 { font-size: clamp(34px, 9.5vw, 44px); }
+.wrap { max-width: 520px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 8px 96px; }
+h1, h2, h3 { margin: 0; line-height: 1.12; text-wrap: balance; letter-spacing: -0.02em; font-weight: 800; }
+h1 { font-size: clamp(36px, 10vw, 46px); letter-spacing: -0.035em; }
 h2 { font-size: 24px; }
 h3 { font-size: 17px; font-weight: 700; }
 p { margin: 0; }
@@ -60,156 +59,200 @@ button { font: inherit; cursor: pointer; }
 .num { font-variant-numeric: tabular-nums; }
 .stack { display: grid; gap: 12px; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-/* Boutons : pastilles façon liste d'abonnés */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 10px; border: 0; background: var(--surface-2); color: var(--fg); font-weight: 600; font-size: 15px; text-decoration: none; min-height: 46px; }
-.btn.primary { background: var(--blue); color: var(--blue-ink); }
+
+/* Boutons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 10px; border: 0; background: var(--surface-2); color: var(--fg); font-weight: 600; font-size: 15px; text-decoration: none; min-height: 46px; transition: transform .15s var(--ease), background .2s, box-shadow .2s; }
+.btn:active { transform: scale(.98); }
+.btn.primary { background: var(--blue); color: var(--blue-ink); box-shadow: 0 6px 18px -8px rgba(0,149,246,.7); }
+.btn.primary:hover { background: var(--blue-dark); }
 .btn.block { width: 100%; }
-.btn.ghost { background: transparent; color: var(--blue); }
+.btn.ghost { background: transparent; color: var(--blue); box-shadow: none; }
 .btn.sm { padding: 7px 14px; min-height: 32px; border-radius: 8px; font-size: 14px; }
-.btn.xl { font-size: 17px; min-height: 52px; border-radius: 12px; }
+.btn.xl { font-size: 17px; min-height: 54px; border-radius: 12px; }
 .btn:focus-visible, input:focus-visible, .tab:focus-visible, .check:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
 input[type=text], input[type=email] { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); font: inherit; }
-header.top { display: flex; align-items: center; justify-content: space-between; padding-block: 8px 12px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+
+/* Barre du haut */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); display: flex; align-items: center; justify-content: space-between; padding-block: 8px 10px; border-bottom: 1px solid var(--line); margin: 0 -16px 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .brand { font-family: "Grand Hotel", cursive; font-weight: 400; font-size: 32px; letter-spacing: 0; display: flex; align-items: center; gap: 8px; text-decoration: none; line-height: 1; }
-.brand .dot { display: none; }
-.sring { display: inline-flex; padding: 2px; border-radius: 50%; background: var(--ring); flex: none; }
-.sring .avatar { box-shadow: 0 0 0 2px var(--bg); border-color: transparent; }
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; background: var(--surface-2); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
 .view { display: none; }
-.view.active { display: block; }
+.view.active { display: block; animation: viewIn .35s var(--ease) both; }
+@keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-/* ===== Rangées façon liste d'abonnés (partagées landing + appli) ===== */
+/* Avatars + anneau story */
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-weight: 700; color: var(--muted); flex: none; border: 1px solid var(--line); }
+.sring { display: inline-flex; padding: 4px; border-radius: 50%; background: var(--ring); flex: none; }
+.sring .avatar { box-shadow: 0 0 0 2px var(--bg); border-color: transparent; }
+.sring.live { background: var(--ring-conic); animation: spin 6s linear infinite; }
+@keyframes spin { to { --a: 360deg; } }
+
+/* Rangées façon liste d'abonnés */
 .list { display: grid; }
 .person { display: flex; align-items: center; gap: 12px; padding: 9px 0; min-width: 0; }
-.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-weight: 700; color: var(--muted); flex: none; border: 1px solid var(--line); }
 .person .who { flex: 1; min-width: 0; }
 .person .who b { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .person .who span, .person .who small { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.chip { font-size: 14px; font-weight: 600; padding: 7px 14px; border-radius: 8px; background: var(--surface-2); color: var(--fg); text-decoration: none; flex: none; border: 0; }
+.chip { font-size: 14px; font-weight: 600; padding: 7px 14px; border-radius: 8px; background: var(--surface-2); color: var(--fg); text-decoration: none; flex: none; border: 0; transition: transform .15s var(--ease); }
+.chip:active { transform: scale(.96); }
 .chip.blue { background: var(--blue); color: var(--blue-ink); }
 .chip.red { background: transparent; color: var(--accent); padding-left: 0; padding-right: 0; }
 .person.locked .avatar { background: var(--blur); border-color: transparent; color: transparent; }
 .person.locked .bar { height: 12px; border-radius: 6px; background: var(--blur); filter: blur(3px); opacity: .9; }
 .person.locked .bar.s { width: 40%; height: 9px; margin-top: 6px; opacity: .6; }
+.person.locked { animation: shimmer 2.4s ease-in-out infinite; }
+@keyframes shimmer { 0%, 100% { opacity: .9; } 50% { opacity: .55; } }
 .lock-cta { position: relative; margin-top: -64px; padding-top: 64px; background: linear-gradient(to bottom, transparent, var(--bg) 55%); display: grid; gap: 10px; text-align: center; }
+.list.anim .person { animation: rowIn .5s var(--ease) both; }
+.list.anim .person:nth-child(1) { animation-delay: .05s } .list.anim .person:nth-child(2) { animation-delay: .12s } .list.anim .person:nth-child(3) { animation-delay: .19s } .list.anim .person:nth-child(4) { animation-delay: .26s } .list.anim .person:nth-child(5) { animation-delay: .33s } .list.anim .person:nth-child(n+6) { animation-delay: .4s }
+@keyframes rowIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+
+/* Révélation au scroll (visible par défaut ; la classe pre n'est posée que si JS peut la retirer) */
+.rv.pre { opacity: 0; transform: translateY(14px); }
+.rv.in { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform .6s var(--ease); }
 
 /* ===== Landing ===== */
-.trustbar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; font-size: 12px; font-weight: 600; color: var(--muted); padding-block: 2px 14px; }
-.trustbar span { display: inline-flex; align-items: center; gap: 5px; }
+.trustbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding-block: 4px 16px; }
+.trustbar span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--fg); background: var(--surface-2); padding: 6px 10px; border-radius: 999px; }
 .trustbar span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.testbar .btn { white-space: nowrap; }
+.testbar { background: var(--bg-2); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; }
 .hero { display: grid; gap: 14px; text-align: center; }
 .hero .lead { font-size: 17px; color: var(--muted); max-width: 32ch; margin: 0 auto; }
-/* Maquette de téléphone : une liste d'abonnés qu'on reconnaît tout de suite */
-.phone { margin: 6px auto 0; width: min(100%, 340px); border: 1px solid var(--line); border-radius: 28px; padding: 14px 12px 16px; background: var(--surface); box-shadow: 0 20px 50px -30px rgba(0,0,0,.35); text-align: left; }
-.phone .ptop { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px; padding: 0 4px 10px; }
-.phone .ptop small { font-weight: 500; color: var(--muted); font-size: 12px; }
-.phone .ptabs { display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: 13px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line); margin-bottom: 4px; }
-.phone .ptabs b { color: var(--fg); border-bottom: 2px solid var(--fg); padding-bottom: 8px; }
-.phone .ptabs span { padding-bottom: 8px; }
-.phone .psearch { background: var(--surface-2); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: var(--muted); margin: 8px 0 4px; }
-.phone .person { padding: 7px 4px; }
-.phone .avatar { width: 40px; height: 40px; }
 .hero-cta { display: grid; gap: 8px; }
-.hero-cta .small { color: var(--muted); }
+/* Téléphone */
+.phone { margin: 10px auto 0; width: min(100%, 330px); border-radius: 36px; padding: 10px; background: #111; box-shadow: 0 30px 60px -30px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08); text-align: left; }
+.screen { background: var(--surface); border-radius: 28px; overflow: hidden; position: relative; }
+.status { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px 0; font-size: 12px; font-weight: 600; }
+.notch { width: 92px; height: 24px; background: #111; border-radius: 0 0 16px 16px; margin: -10px auto 0; }
+.status .sig { display: inline-flex; gap: 3px; align-items: flex-end; height: 10px; }
+.status .sig i { width: 3px; background: var(--fg); border-radius: 1px; display: block; }
+.ptop { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px; padding: 10px 14px 8px; }
+.ptop small { font-weight: 500; color: var(--muted); font-size: 12px; }
+.ptabs { display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: 13px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line); margin: 0 0 4px; position: relative; }
+.ptabs b { color: var(--fg); padding-bottom: 8px; }
+.ptabs span { padding-bottom: 8px; }
+.ptabs::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 50%; height: 2px; background: var(--fg); }
+.psearch { background: var(--surface-2); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: var(--muted); margin: 8px 12px 4px; }
+.screen .list { padding: 0 12px 10px; }
+.screen .person { padding: 7px 0; }
+.screen .avatar { width: 40px; height: 40px; }
+.screen .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(to bottom, transparent, var(--surface)); pointer-events: none; }
 
-.fomo { margin-top: 22px; background: var(--accent); color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 15px; line-height: 1.4; }
-.fomo b { display: block; font-size: 18px; margin-bottom: 2px; }
-.sec { margin-top: 34px; display: grid; gap: 12px; }
-.sec h2 { text-align: left; }
-.pain { background: var(--surface-2); border-radius: 14px; padding: 18px 16px; display: grid; gap: 10px; }
-.pain p { color: var(--fg); }
-.pain .q { font-size: 17px; font-weight: 700; line-height: 1.3; }
-.pain ol { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 4px; font-size: 14px; }
-.pain .punch { font-weight: 700; color: var(--accent); }
-.steps { display: grid; gap: 8px; }
-.step { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.fomo { margin-top: 20px; background: var(--ring); color: #fff; border-radius: 14px; padding: 16px 16px; font-size: 15px; line-height: 1.4; box-shadow: var(--shadow); }
+.fomo b { display: block; font-size: 19px; margin-bottom: 2px; letter-spacing: -0.01em; }
+
+.sec { margin-top: 40px; display: grid; gap: 14px; }
+.band { background: var(--bg-2); margin-left: -16px; margin-right: -16px; padding: 28px max(16px, env(safe-area-inset-left, 0px)) 28px max(16px, env(safe-area-inset-right, 0px)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.pain { display: grid; gap: 12px; }
+.pain .q { font-size: 20px; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; }
+.pain .steps-pain { display: grid; gap: 8px; }
+.pain .steps-pain div { display: flex; gap: 10px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.pain .steps-pain i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--muted); flex: none; }
+.pain .punch { font-weight: 700; color: var(--accent); font-size: 16px; }
+.steps { display: grid; gap: 0; }
+.step { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--line); }
 .step:last-child { border-bottom: 0; }
-.step .n { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); color: var(--blue-ink); display: grid; place-items: center; font-weight: 800; }
+.step .n { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); color: var(--blue-ink); display: grid; place-items: center; font-weight: 800; box-shadow: 0 6px 14px -6px rgba(0,149,246,.6); }
 .step b { display: block; font-size: 15px; }
 .step p { color: var(--muted); font-size: 14px; }
-.compare { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; }
+.compare { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; background: var(--surface); }
 .compare .r { display: grid; grid-template-columns: 1.3fr 1fr 1fr; align-items: center; border-bottom: 1px solid var(--line); }
 .compare .r:last-child { border-bottom: 0; }
-.compare .r > * { padding: 10px 10px; min-width: 0; }
+.compare .r > * { padding: 11px 10px; min-width: 0; }
 .compare .r > *:first-child { color: var(--muted); }
-.compare .h { background: var(--surface-2); font-weight: 700; color: var(--fg); }
+.compare .h { background: var(--surface-2); font-weight: 700; }
 .compare .h > *:first-child { color: var(--fg); }
 .compare .bad { color: var(--accent); font-weight: 600; }
 .compare .good { color: var(--green); font-weight: 600; }
-.compare .us { background: color-mix(in oklab, var(--blue) 7%, var(--surface)); }
-.see-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.see-tile { border-radius: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 2px; }
-.see-tile b { font-size: 34px; line-height: 1; letter-spacing: -0.03em; font-weight: 800; }
-.see-tile span { font-size: 13px; color: var(--muted); }
-.see-tile.accent b { color: var(--accent); } .see-tile.green b { color: var(--green); } .see-tile.amber b { color: var(--amber); }
-.visual { margin: 0; border-radius: 14px; overflow: hidden; } .visual img { display: block; width: 100%; }
-.scenes { background: var(--fg); color: var(--bg); border-radius: 14px; padding: 22px 18px; display: grid; gap: 12px; }
-.scenes h2 { color: var(--bg); font-size: 26px; }
-.scenes p { opacity: .8; }
+.compare .us { background: color-mix(in oklab, var(--blue) 8%, var(--surface)); }
+/* Aperçu profil façon « ce que tu vas voir » */
+.preview { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: var(--surface); display: grid; gap: 14px; box-shadow: var(--shadow); }
+.preview .head { display: flex; align-items: center; gap: 14px; }
+.preview .head .avatar { width: 64px; height: 64px; font-size: 22px; }
+.preview .head b { display: block; font-size: 16px; }
+.preview .head small { color: var(--muted); font-size: 13px; }
+.counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.counts button, .counts div { background: none; border: 0; padding: 8px 2px; border-radius: 10px; display: grid; gap: 1px; text-align: center; color: inherit; transition: background .2s; }
+.counts b { font-size: 22px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; }
+.counts span { font-size: 11px; color: var(--muted); line-height: 1.2; }
+.counts .accent b { color: var(--accent); } .counts .green b { color: var(--green); } .counts .amber b { color: var(--amber); }
+.counts button.active { background: var(--surface-2); }
+.visual { margin: 0; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); } .visual img { display: block; width: 100%; }
+.scenes { background: var(--ring); color: #fff; border-radius: 16px; padding: 24px 18px; display: grid; gap: 12px; box-shadow: var(--shadow); }
+.scenes h2 { color: #fff; font-size: 28px; }
+.scenes p { opacity: .92; font-size: 16px; }
+.scenes .btn { background: #fff; color: #262626; }
 .price-grid { display: grid; gap: 8px; }
-.plan { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; color: inherit; }
+.plan { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; color: inherit; transition: transform .15s var(--ease); }
+.plan:active { transform: scale(.99); }
 .plan.best { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
 .plan b { font-size: 16px; }
 .plan .tag { font-size: 12px; color: var(--blue); font-weight: 700; }
 .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
 .faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
-.faq summary::after { content: "+"; color: var(--muted); flex: none; }
-.faq details[open] summary::after { content: "–"; }
+.faq summary::after { content: "+"; color: var(--muted); flex: none; transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { margin-top: 8px; color: var(--muted); font-size: 14px; }
-footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: grid; gap: 8px; }
+footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: grid; gap: 8px; }
 footer .links { display: flex; flex-wrap: wrap; gap: 10px 14px; }
 footer button { background: none; border: 0; color: var(--muted); padding: 0; text-decoration: underline; font-size: 12px; }
+/* Barre d'action collante */
+.sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in oklab, var(--bg) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform .35s var(--ease); }
+.sticky-cta.show { transform: none; }
+.sticky-cta .inner { max-width: 520px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
+.sticky-cta .inner span { flex: 1; min-width: 0; font-size: 13px; color: var(--muted); }
 
 /* ===== Import ===== */
-.drop { border: 2px dashed var(--line); border-radius: 14px; padding: 26px 16px; text-align: center; display: grid; gap: 8px; background: var(--surface); }
+.drop { border: 2px dashed var(--line); border-radius: 14px; padding: 26px 16px; text-align: center; display: grid; gap: 8px; background: var(--surface); transition: border-color .2s, background .2s; }
 .drop.over { border-color: var(--blue); background: color-mix(in oklab, var(--blue) 8%, var(--surface)); }
 .drop input { display: none; }
 .guide { display: grid; gap: 12px; }
-.guide .shot { background: var(--surface-2); border-radius: 12px; padding: 12px; font-size: 14px; display: grid; gap: 6px; }
-.guide .shot .ui { background: var(--bg); border-radius: 8px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.guide .shot { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 14px; display: grid; gap: 6px; }
+.guide .shot .ui { background: var(--surface); border-radius: 8px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; border: 1px solid var(--line); }
 .guide .shot .ui .chk { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
 .guide .shot .ui.on .chk { background: var(--blue); border-color: var(--blue); }
 .progress { height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
 .progress i { display: block; height: 100%; width: 0; background: var(--blue); transition: width .3s; }
 .err { background: color-mix(in oklab, var(--accent) 10%, var(--surface)); border: 1px solid var(--accent); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
 
-/* ===== Appli : en-tête façon profil ===== */
-.profile { display: grid; gap: 10px; padding-block: 2px 10px; }
+/* ===== Appli ===== */
+.profile { display: grid; gap: 12px; padding-block: 2px 8px; }
 .profile .who { display: flex; align-items: center; gap: 14px; }
 .profile .who .avatar { width: 72px; height: 72px; font-size: 24px; }
 .profile .who b { font-size: 17px; display: block; }
-.counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-.counts button { background: none; border: 0; padding: 8px 2px; border-radius: 10px; display: grid; gap: 1px; text-align: center; color: inherit; }
-.counts b { font-size: 20px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; }
-.counts span { font-size: 11px; color: var(--muted); line-height: 1.2; }
-.counts .accent b { color: var(--accent); } .counts .green b { color: var(--green); } .counts .amber b { color: var(--amber); }
-.counts button.active { background: var(--surface-2); }
-.tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--line); scrollbar-width: none; margin-bottom: 12px; }
+.tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--line); scrollbar-width: none; margin-bottom: 12px; position: relative; }
 .tabs::-webkit-scrollbar { display: none; }
-.tab { white-space: nowrap; padding: 10px 12px; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 14px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tab { white-space: nowrap; padding: 10px 12px; border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 14px; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .2s, border-color .2s; }
 .tab.active { color: var(--fg); border-bottom-color: var(--fg); }
+#panel { animation: viewIn .3s var(--ease) both; }
 .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-.filters button { padding: 6px 12px; border-radius: 8px; border: 0; background: var(--surface-2); color: var(--muted); font-size: 13px; font-weight: 600; }
+.filters button { padding: 6px 12px; border-radius: 8px; border: 0; background: var(--surface-2); color: var(--muted); font-size: 13px; font-weight: 600; transition: background .2s, color .2s; }
 .filters button.on { background: var(--fg); color: var(--bg); }
 .empty { text-align: center; padding: 28px 16px; color: var(--muted); display: grid; gap: 10px; }
-.check { width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--line); background: transparent; flex: none; display: grid; place-items: center; color: var(--blue-ink); }
+.check { width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--line); background: transparent; flex: none; display: grid; place-items: center; color: var(--blue-ink); transition: background .2s, border-color .2s; }
 .check.on { background: var(--green); border-color: var(--green); }
 .chart { width: 100%; height: auto; display: block; }
 .chart text { fill: var(--muted); font-size: 11px; font-family: var(--font); }
+.chart .draw { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 1.6s var(--ease) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
 .score { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; }
 .ring { width: 96px; height: 96px; }
-.share-preview { width: 100%; max-width: 260px; border-radius: 14px; border: 1px solid var(--line); display: block; margin: 0 auto; }
+.share-preview { width: 100%; max-width: 260px; border-radius: 14px; border: 1px solid var(--line); display: block; margin: 0 auto; box-shadow: var(--shadow); }
 .kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px; }
 .kv b { font-weight: 600; }
 .badge-ok { color: var(--green); font-weight: 600; }
-.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; z-index: 50; max-width: calc(100% - 32px); }
+.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; z-index: 50; max-width: calc(100% - 32px); animation: toastIn .3s var(--ease); }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 /* ===== Modales ===== */
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 40; display: none; align-items: flex-end; justify-content: center; padding: 0; }
-.modal.open { display: flex; }
-.sheet { background: var(--bg); border-radius: 18px 18px 0 0; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px calc(24px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.modal.open { display: flex; animation: fadeIn .2s both; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+.sheet { background: var(--bg); border-radius: 18px 18px 0 0; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px calc(24px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; animation: sheetUp .35s var(--ease) both; }
+@keyframes sheetUp { from { transform: translateY(40px); opacity: .6; } to { transform: none; opacity: 1; } }
 .sheet .handle { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 4px; }
 .sheet h2 { font-size: 22px; }
 .legal { font-size: 14px; color: var(--muted); display: grid; gap: 10px; }
@@ -217,62 +260,68 @@ footer button { background: none; border: 0; color: var(--muted); padding: 0; te
 .todo { background: color-mix(in oklab, var(--amber) 18%, var(--surface)); border: 1px dashed var(--amber); border-radius: 6px; padding: 1px 6px; color: var(--fg); font-weight: 600; }
 label.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); }
 label.consent input { margin-top: 3px; }
-@media (min-width: 600px) { .modal { align-items: center; padding: 16px; } .sheet { border-radius: 18px; } }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media (min-width: 600px) { .modal { align-items: center; padding: 16px; } .sheet { border-radius: 18px; } header.top { margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; } .band { margin-left: 0; margin-right: 0; border-radius: 16px; border: 1px solid var(--line); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } .rv.pre { opacity: 1; transform: none; } }
 </style>
 
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <a class="brand" href="#" id="brandLink"><span class="dot"></span>Lâcheurs</a>
+    <a class="brand" href="#" id="brandLink">Lâcheurs</a>
     <div class="row" id="topRight"><span class="pill" id="premiumPill" hidden>Premium</span><button class="btn sm ghost" id="btnMyData" hidden>Mes imports</button></div>
   </header>
 
   <!-- ===== LANDING ===== -->
   <section class="view active" id="viewLanding">
+    <div class="testbar"><span><b>Version test privée.</b> Dis-moi ce que t'en penses.</span><button class="btn sm" id="btnFeedback">Mon avis</button></div>
     <div class="trustbar"><span>Sans mot de passe</span><span>Export officiel</span><span>Gratuit</span></div>
-    <div class="err" style="margin-bottom:14px"><b>Version test privée.</b> Dis-moi ce que t'en penses : <button class="btn sm" id="btnFeedback" style="margin-left:6px">Donner mon avis</button></div>
 
     <div class="hero">
       <h1>Ils t'ont unfollow en scred.</h1>
       <p class="lead">Toi, tu les suis encore. Vois qui ne te suit pas en retour et qui t'a lâché. En 2 minutes, sans mot de passe.</p>
       <div class="hero-cta">
         <button class="btn primary block xl" id="ctaStart">Démasquer mes lâcheurs</button>
-        <p class="small">Gratuit. Rien ne se connecte à ton compte.</p>
+        <p class="small muted">Gratuit. Rien ne se connecte à ton compte.</p>
       </div>
       <div class="phone" aria-label="Exemple de résultat">
-        <div class="ptop"><span>‹ &nbsp;toncompte</span><small>exemple</small></div>
-        <div class="ptabs"><b>16 sans retour</b><span>6 lâcheurs</span></div>
-        <div class="psearch">Rechercher</div>
-        <div class="list">
-          <div class="person"><span class="sring"><div class="avatar">L</div></span><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans. Elle, non.</small></div><span class="chip">Abonné(e)</span></div>
-          <div class="person"><span class="sring"><div class="avatar">T</div></span><div class="who"><b>tom_d•••</b><small>T'a unfollow il y a 5 jours</small></div><span class="chip red">Parti</span></div>
-          <div class="person"><span class="sring"><div class="avatar">H</div></span><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip">Abonné(e)</span></div>
-          <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:55%"></div><div class="bar s"></div></div></div>
-          <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:70%"></div><div class="bar s"></div></div></div>
+        <div class="screen">
+          <div class="status"><span>9:41</span><span class="sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span></div>
+          <div class="notch"></div>
+          <div class="ptop"><span>‹ &nbsp;toncompte</span><small>exemple</small></div>
+          <div class="ptabs"><b><span class="num" data-count="16">0</span> sans retour</b><span><span class="num" data-count="6">0</span> lâcheurs</span></div>
+          <div class="psearch">Rechercher</div>
+          <div class="list anim" id="heroList">
+            <div class="person"><span class="sring"><div class="avatar">L</div></span><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans. Elle, non.</small></div><span class="chip">Abonné(e)</span></div>
+            <div class="person"><span class="sring"><div class="avatar">T</div></span><div class="who"><b>tom_d•••</b><small>T'a unfollow il y a 5 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person"><span class="sring"><div class="avatar">H</div></span><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip">Abonné(e)</span></div>
+            <div class="person"><span class="sring"><div class="avatar">M</div></span><div class="who"><b>manon_•••</b><small>T'a unfollow il y a 12 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:55%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>
+            <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:70%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>
+          </div>
+          <div class="fade"></div>
         </div>
       </div>
     </div>
 
-    <div class="fomo"><b>Pendant que tu lis ça, quelqu'un se désabonne.</b> Insta ne te le dira jamais. Ton compteur baisse, et tu devines.</div>
+    <div class="fomo rv"><b>Pendant que tu lis ça, quelqu'un se désabonne.</b>Insta ne te le dira jamais. Ton compteur baisse, et tu devines.</div>
 
-    <div class="sec">
+    <div class="sec band rv">
       <h2>Tu fais encore ça à la main ?</h2>
       <div class="pain">
         <p class="q">Tu vas sur son profil. Tu ouvres ses abonnements. Tu cherches ton nom.</p>
-        <ol>
-          <li>Ton compteur passe de 512 à 509.</li>
-          <li>Tu scrolles ta liste pour deviner qui est parti.</li>
-          <li>Tu checkes un par un si tes potes te suivent encore.</li>
-          <li>Tu trouves rien, t'as perdu 10 minutes.</li>
-        </ol>
+        <div class="steps-pain">
+          <div><i>1</i>Ton compteur passe de 512 à 509.</div>
+          <div><i>2</i>Tu scrolles ta liste pour deviner qui est parti.</div>
+          <div><i>3</i>Tu checkes un par un si tes potes te suivent encore.</div>
+          <div><i>4</i>Tu trouves rien. T'as perdu 10 minutes.</div>
+        </div>
         <p class="punch">Insta ne te dira jamais qui t'a lâché. Nous, si. Avec les noms.</p>
       </div>
       <figure class="visual"><img src="media/visual.jpg" alt="" loading="lazy" onerror="this.parentElement.hidden=true"></figure>
     </div>
 
-    <div class="sec">
+    <div class="sec rv">
       <h2>3 étapes, 2 minutes</h2>
       <div class="steps">
         <div class="step"><div class="n">1</div><div><b>Tu demandes ton fichier à Insta</b><p>Un bouton t'emmène au bon endroit. Tu coches « Abonnés et abonnements ».</p></div></div>
@@ -282,7 +331,21 @@ label.consent input { margin-top: 3px; }
       <button class="btn primary block xl" data-go="viewImport">Je veux les noms</button>
     </div>
 
-    <div class="sec">
+    <div class="sec rv">
+      <h2>Ce que tu vas voir</h2>
+      <div class="preview">
+        <div class="head"><span class="sring live"><div class="avatar">T</div></span><div><b>toncompte</b><small>Import du jour · exemple</small></div></div>
+        <div class="counts">
+          <div class="accent"><b class="num" data-count="16">0</b><span>sans retour</span></div>
+          <div class="accent"><b class="num" data-count="6">0</b><span>t'ont lâché</span></div>
+          <div class="green"><b class="num" data-count="4">0</b><span>fans</span></div>
+          <div class="amber"><b class="num" data-count="1">0</b><span>jamais accepté</span></div>
+        </div>
+        <p class="small muted">Les 3 premiers noms de chaque liste sont gratuits. Les autres t'attendent.</p>
+      </div>
+    </div>
+
+    <div class="sec rv">
       <h2>Les applis du store vs Lâcheurs</h2>
       <div class="compare">
         <div class="r h"><div></div><div>Applis du store</div><div class="us">Lâcheurs</div></div>
@@ -294,30 +357,19 @@ label.consent input { margin-top: 3px; }
       <p class="small muted">Les applis qui se connectent à ta place sont détectées par Instagram. Des comptes se font restreindre ou bloquer pour ça. Ici, tu utilises le bouton officiel « Télécharger vos informations ».</p>
     </div>
 
-    <div class="sec">
-      <h2>Ce que tu vas voir</h2>
-      <div class="see-grid">
-        <div class="see-tile accent"><b class="num">16</b><span>ne te suivent pas en retour</span></div>
-        <div class="see-tile accent"><b class="num">6</b><span>t'ont lâché ce mois-ci</span></div>
-        <div class="see-tile green"><b class="num">4</b><span>fans qui te suivent sans retour</span></div>
-        <div class="see-tile amber"><b class="num">1</b><span>ne t'a jamais accepté</span></div>
-      </div>
-      <p class="small muted">Chiffres d'exemple. Les 3 premiers noms de chaque liste sont gratuits. Les autres t'attendent.</p>
-    </div>
-
-    <div class="sec scenes">
+    <div class="sec scenes rv">
       <h2>Ton ex. Ton crush. Ton meilleur pote.</h2>
       <p>Tu sais enfin qui te suit vraiment, et depuis quand. Après, tu fais le tri.</p>
-      <button class="btn block xl" data-go="viewImport" style="background:var(--bg);color:var(--fg)">Voir mes lâcheurs</button>
+      <button class="btn block xl" data-go="viewImport">Démasquer mes lâcheurs</button>
     </div>
 
-    <div class="sec">
+    <div class="sec rv">
       <h2>Gratuit pour commencer</h2>
       <p class="muted small">Tes chiffres, 3 noms par liste, ta courbe et ta carte à partager : gratuit. Premium pour tous les noms, le nettoyage guidé et la comparaison entre imports.</p>
       <div class="price-grid" id="landingPlans"></div>
     </div>
 
-    <div class="sec faq">
+    <div class="sec faq rv">
       <h2>Questions</h2>
       <details><summary>Je risque un ban ?</summary><p>Non. Tu utilises uniquement l'export officiel de tes données, prévu par Instagram. Aucune connexion automatique, aucune action sur ton compte.</p></details>
       <details><summary>Vous avez mon mot de passe ?</summary><p>Non, jamais. Tu ne le tapes nulle part ici. Si un site ou une appli te le demande pour « voir qui t'a unfollow », ferme-le.</p></details>
@@ -374,13 +426,13 @@ label.consent input { margin-top: 3px; }
   <!-- ===== DASHBOARD ===== -->
   <section class="view" id="viewDash">
     <div class="profile">
-      <div class="who"><span class="sring"><div class="avatar" id="acctAvatar">?</div></span><div><b id="acctPill">@compte</b><span class="small muted" id="snapInfo"></span></div></div>
+      <div class="who"><span class="sring live"><div class="avatar" id="acctAvatar">?</div></span><div><b id="acctPill">compte</b><span class="small muted" id="snapInfo"></span></div></div>
       <div id="demoBanner" class="err" hidden>Compte fictif pour la démo. Dépose ton vrai fichier pour voir tes chiffres.</div>
       <div class="counts">
-        <button class="accent tile" data-tab="lacheurs"><b class="num" id="tLacheurs">0</b><span>t'ont lâché</span></button>
-        <button class="accent tile" data-tab="sansretour"><b class="num" id="tSansRetour">0</b><span>sans retour</span></button>
-        <button class="green tile" data-tab="fans"><b class="num" id="tFans">0</b><span>fans</span></button>
-        <button class="amber tile" data-tab="jamais"><b class="num" id="tJamais">0</b><span>jamais acceptés</span></button>
+        <button class="accent" data-tab="lacheurs"><b class="num" id="tLacheurs">0</b><span>t'ont lâché</span></button>
+        <button class="accent" data-tab="sansretour"><b class="num" id="tSansRetour">0</b><span>sans retour</span></button>
+        <button class="green" data-tab="fans"><b class="num" id="tFans">0</b><span>fans</span></button>
+        <button class="amber" data-tab="jamais"><b class="num" id="tJamais">0</b><span>jamais acceptés</span></button>
       </div>
     </div>
     <div class="tabs" id="tabs">
@@ -402,6 +454,8 @@ label.consent input { margin-top: 3px; }
     </footer>
   </section>
 </div>
+
+<div class="sticky-cta" id="stickyCta"><div class="inner"><span>Gratuit · sans mot de passe</span><button class="btn primary" data-go="viewImport">Démasquer mes lâcheurs</button></div></div>
 
 <!-- ===== PAYWALL ===== -->
 <div class="modal" id="paywall" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
@@ -467,7 +521,16 @@ const plural = (n, s, p) => n + ' ' + (n > 1 ? p : s);
 const daysAgo = ts => Math.round((Date.now() - ts) / 86400000);
 const since = ts => { const d = daysAgo(ts); if (d < 1) return "aujourd'hui"; if (d < 30) return `il y a ${plural(d, 'jour', 'jours')}`; if (d < 365) return `il y a ${plural(Math.round(d / 30), 'mois', 'mois')}`; return `il y a ${plural(Math.round(d / 365), 'an', 'ans')}`; };
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
-function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); }
+function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); updateSticky(); }
+function updateSticky() { const on = $('#viewLanding').classList.contains('active') && window.scrollY > 420; $('#stickyCta').classList.toggle('show', on); }
+window.addEventListener('scroll', updateSticky, { passive: true });
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countUp(el, to, ms = 900) {
+  if (!el) return; if (reduceMotion || to < 2) { el.textContent = to; return; }
+  const t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / ms); const e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
 /* ---------- parsing ---------- */
@@ -619,7 +682,7 @@ function lockedRow(i) { const w = 45 + ((i * 37) % 40); return `<div class="pers
 function renderList(items, subFn, emptyMsg, extra = () => ({})) {
   if (!items.length) return `<div class="empty"><b>${emptyMsg}</b></div>`;
   const free = state.premium ? items : items.slice(0, CONFIG.freeNames);
-  let html = `<div class="list">${free.map(e => personRow(e, { sub: subFn(e), ...extra(e) })).join('')}`;
+  let html = `<div class="list anim">${free.map(e => personRow(e, { sub: subFn(e), ...extra(e) })).join('')}`;
   if (!state.premium && items.length > CONFIG.freeNames) {
     const rest = items.length - CONFIG.freeNames;
     html += Array.from({ length: Math.min(rest, 4) }, (_, i) => lockedRow(i)).join('');
@@ -682,7 +745,7 @@ function renderHistory(a) {
     <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe du nombre d'abonnés dans le temps">
       ${ticks.map(t => `<line x1="${px}" x2="${W - 8}" y1="${t.y.toFixed(1)}" y2="${t.y.toFixed(1)}" stroke="var(--line)" stroke-width="1"/><text x="${px - 6}" y="${(t.y + 4).toFixed(1)}" text-anchor="end">${t.v.toLocaleString('fr-FR')}</text>`).join('')}
       <path d="${area}" fill="var(--green)" opacity=".18"/>
-      <path d="${path}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linejoin="round"/>
+      <path class="draw" d="${path}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linejoin="round"/>
       <circle cx="${x(last).toFixed(1)}" cy="${y(total).toFixed(1)}" r="5" fill="var(--green)" stroke="var(--surface)" stroke-width="2"/>
       ${xt.map((t, i) => `<text x="${x(t).toFixed(1)}" y="${H - 2}" text-anchor="${i === 0 ? 'start' : i === 2 ? 'end' : 'middle'}">${years > 1 ? new Date(t).getFullYear() : fmtDateShort(t)}</text>`).join('')}
     </svg>
@@ -734,10 +797,8 @@ function openDashboard(exports, demo = false) {
   const when = daysAgo(latest.date) > 0 ? ` · export du ${fmtDate(latest.date)}` : '';
   $('#snapInfo').textContent = (prior.length ? `${plural(prior.length, 'import précédent', 'imports précédents')}` : 'Premier import') + when;
   const r = computeLacheurs(a, state.snapshots, state.period);
-  $('#tLacheurs').textContent = r.baseline ? r.list.length : '–';
-  $('#tSansRetour').textContent = a.sansRetour.length;
-  $('#tFans').textContent = a.fans.length;
-  $('#tJamais').textContent = a.jamais.length;
+  if (r.baseline) countUp($('#tLacheurs'), r.list.length); else $('#tLacheurs').textContent = '–';
+  countUp($('#tSansRetour'), a.sansRetour.length); countUp($('#tFans'), a.fans.length); countUp($('#tJamais'), a.jamais.length);
   $('#btnMyData').hidden = false;
   state.tab = r.baseline && r.list.length ? 'lacheurs' : 'sansretour';
   show('viewDash'); renderPanel();
@@ -894,6 +955,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePaywa
   if (CONFIG.previewHash && location.hash === CONFIG.previewHash) setPremium(true, false);
   if (CONFIG.cfAnalyticsToken) { const s = document.createElement('script'); s.defer = true; s.src = 'https://static.cloudflareinsights.com/beacon.min.js'; s.setAttribute('data-cf-beacon', JSON.stringify({ token: CONFIG.cfAnalyticsToken })); document.body.appendChild(s); }
   const keys = store.keys().filter(k => k.startsWith('lacheurs:snap:')); if (keys.length) $('#btnMyData').hidden = false;
+  // Motion : révélation au scroll (sans JS, tout reste visible) et compteurs d'exemple
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    const els = $$('.rv'); els.forEach(el => el.classList.add('pre'));
+    const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.remove('pre'); en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    els.forEach(el => io.observe(el));
+    setTimeout(() => els.forEach(el => { el.classList.remove('pre'); el.classList.add('in'); }), 2500);
+    const cio = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { countUp(en.target, +en.target.dataset.count, 1100); cio.unobserve(en.target); } }));
+    $$('[data-count]').forEach(el => cio.observe(el));
+  } else { $$('[data-count]').forEach(el => el.textContent = el.dataset.count); }
+  updateSticky();
 })();
 </script>
 
