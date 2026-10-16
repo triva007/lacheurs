@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Vois qui ne te suit pas en retour sur Instagram et qui s'est désabonné. Sans mot de passe, sans appli, gratuit.">
+<meta name="robots" content="noindex">
+<meta name="description" content="Vois qui ne te suit pas en retour sur Instagram et qui t'a lâché. Sans mot de passe, gratuit.">
 <meta name="theme-color" content="#FFFFFF">
-<meta property="og:title" content="Lâcheurs · Vois qui t'a lâché sur Insta">
-<meta property="og:description" content="Qui ne te suit pas en retour, sans mot de passe. Gratuit.">
+<meta property="og:title" content="Lâcheurs · Ils t'ont unfollow en scred">
+<meta property="og:description" content="Vois qui ne te suit pas en retour, sans mot de passe. Gratuit.">
 <meta property="og:image" content="/media/og.jpg">
-<title>Lâcheurs · Vois qui t'a lâché sur Insta</title>
+<title>Lâcheurs · Ils t'ont unfollow en scred</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap">
 <style>
 /* Layout : grammaire visuelle d'une liste d'abonnés (avatar rond, pseudo gras, pastille à droite), thème clair, police système, une colonne. */
 :root {
@@ -20,7 +22,8 @@
   --muted: #8E8E8E;
   --blue: #0095F6;
   --blue-ink: #FFFFFF;
-  --accent: #FF3B5C;      /* lâcheurs, pertes */
+  --accent: #ED4956;      /* rouge notification, lâcheurs */
+  --ring: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7); /* anneau story — V1 test, à retirer avant mise en ligne */
   --green: #1DA462;       /* fans, positif */
   --amber: #C98A00;       /* en attente */
   --blur: #C7C7C7;
@@ -68,8 +71,10 @@ button { font: inherit; cursor: pointer; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
 input[type=text], input[type=email] { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); font: inherit; }
 header.top { display: flex; align-items: center; justify-content: space-between; padding-block: 8px 12px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
-.brand { font-weight: 800; font-size: 22px; letter-spacing: -0.03em; display: flex; align-items: center; gap: 8px; text-decoration: none; }
-.brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.brand { font-family: "Grand Hotel", cursive; font-weight: 400; font-size: 32px; letter-spacing: 0; display: flex; align-items: center; gap: 8px; text-decoration: none; line-height: 1; }
+.brand .dot { display: none; }
+.sring { display: inline-flex; padding: 2px; border-radius: 50%; background: var(--ring); flex: none; }
+.sring .avatar { box-shadow: 0 0 0 2px var(--bg); border-color: transparent; }
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; background: var(--surface-2); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
 .view { display: none; }
@@ -109,6 +114,8 @@ header.top { display: flex; align-items: center; justify-content: space-between;
 .hero-cta { display: grid; gap: 8px; }
 .hero-cta .small { color: var(--muted); }
 
+.fomo { margin-top: 22px; background: var(--accent); color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 15px; line-height: 1.4; }
+.fomo b { display: block; font-size: 18px; margin-bottom: 2px; }
 .sec { margin-top: 34px; display: grid; gap: 12px; }
 .sec h2 { text-align: left; }
 .pain { background: var(--surface-2); border-radius: 14px; padding: 18px 16px; display: grid; gap: 10px; }
@@ -171,7 +178,7 @@ footer button { background: none; border: 0; color: var(--muted); padding: 0; te
 /* ===== Appli : en-tête façon profil ===== */
 .profile { display: grid; gap: 10px; padding-block: 2px 10px; }
 .profile .who { display: flex; align-items: center; gap: 14px; }
-.profile .who .avatar { width: 64px; height: 64px; font-size: 22px; }
+.profile .who .avatar { width: 72px; height: 72px; font-size: 24px; }
 .profile .who b { font-size: 17px; display: block; }
 .counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
 .counts button { background: none; border: 0; padding: 8px 2px; border-radius: 10px; display: grid; gap: 1px; text-align: center; color: inherit; }
@@ -225,27 +232,30 @@ label.consent input { margin-top: 3px; }
   <!-- ===== LANDING ===== -->
   <section class="view active" id="viewLanding">
     <div class="trustbar"><span>Sans mot de passe</span><span>Export officiel</span><span>Gratuit</span></div>
+    <div class="err" style="margin-bottom:14px"><b>Version test privée.</b> Dis-moi ce que t'en penses : <button class="btn sm" id="btnFeedback" style="margin-left:6px">Donner mon avis</button></div>
 
     <div class="hero">
-      <h1>Vois qui t'a lâché sur Insta.</h1>
-      <p class="lead">Qui ne te suit pas en retour, qui s'est désabonné, qui t'a jamais accepté. Sans donner ton mot de passe.</p>
+      <h1>Ils t'ont unfollow en scred.</h1>
+      <p class="lead">Toi, tu les suis encore. Vois qui ne te suit pas en retour et qui t'a lâché. En 2 minutes, sans mot de passe.</p>
       <div class="hero-cta">
-        <button class="btn primary block xl" id="ctaStart">Voir mes lâcheurs (gratuit)</button>
-        <p class="small">2 minutes. Rien ne se connecte à ton compte.</p>
+        <button class="btn primary block xl" id="ctaStart">Démasquer mes lâcheurs</button>
+        <p class="small">Gratuit. Rien ne se connecte à ton compte.</p>
       </div>
       <div class="phone" aria-label="Exemple de résultat">
-        <div class="ptop"><span>Ne te suivent pas en retour</span><small>exemple</small></div>
-        <div class="ptabs"><b>Sans retour · 16</b><span>Lâcheurs · 6</span></div>
+        <div class="ptop"><span>‹ &nbsp;toncompte</span><small>exemple</small></div>
+        <div class="ptabs"><b>16 sans retour</b><span>6 lâcheurs</span></div>
         <div class="psearch">Rechercher</div>
         <div class="list">
-          <div class="person"><div class="avatar">L</div><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans</small></div><span class="chip">Abonné(e)</span></div>
-          <div class="person"><div class="avatar">T</div><div class="who"><b>tom_d•••</b><small>T'a lâché il y a 5 jours</small></div><span class="chip red">Parti</span></div>
-          <div class="person"><div class="avatar">H</div><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip">Abonné(e)</span></div>
+          <div class="person"><span class="sring"><div class="avatar">L</div></span><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans. Elle, non.</small></div><span class="chip">Abonné(e)</span></div>
+          <div class="person"><span class="sring"><div class="avatar">T</div></span><div class="who"><b>tom_d•••</b><small>T'a unfollow il y a 5 jours</small></div><span class="chip red">Parti</span></div>
+          <div class="person"><span class="sring"><div class="avatar">H</div></span><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip">Abonné(e)</span></div>
           <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:55%"></div><div class="bar s"></div></div></div>
           <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:70%"></div><div class="bar s"></div></div></div>
         </div>
       </div>
     </div>
+
+    <div class="fomo"><b>Pendant que tu lis ça, quelqu'un se désabonne.</b> Insta ne te le dira jamais. Ton compteur baisse, et tu devines.</div>
 
     <div class="sec">
       <h2>Tu fais encore ça à la main ?</h2>
@@ -257,7 +267,7 @@ label.consent input { margin-top: 3px; }
           <li>Tu checkes un par un si tes potes te suivent encore.</li>
           <li>Tu trouves rien, t'as perdu 10 minutes.</li>
         </ol>
-        <p class="punch">Insta ne te dira jamais qui t'a lâché. Lâcheurs, si.</p>
+        <p class="punch">Insta ne te dira jamais qui t'a lâché. Nous, si. Avec les noms.</p>
       </div>
       <figure class="visual"><img src="media/visual.jpg" alt="" loading="lazy" onerror="this.parentElement.hidden=true"></figure>
     </div>
@@ -269,7 +279,7 @@ label.consent input { margin-top: 3px; }
         <div class="step"><div class="n">2</div><div><b>Tu le déposes ici</b><p>Il est lu sur ton téléphone. Il ne part nulle part.</p></div></div>
         <div class="step"><div class="n">3</div><div><b>Tu vois tout</b><p>Qui ne te suit pas en retour, tes fans, qui t'a lâché.</p></div></div>
       </div>
-      <button class="btn primary block xl" data-go="viewImport">Je récupère mon fichier</button>
+      <button class="btn primary block xl" data-go="viewImport">Je veux les noms</button>
     </div>
 
     <div class="sec">
@@ -292,12 +302,12 @@ label.consent input { margin-top: 3px; }
         <div class="see-tile green"><b class="num">4</b><span>fans qui te suivent sans retour</span></div>
         <div class="see-tile amber"><b class="num">1</b><span>ne t'a jamais accepté</span></div>
       </div>
-      <p class="small muted">Chiffres d'exemple. Les 3 premiers noms de chaque liste sont gratuits. Le reste, tu choisis.</p>
+      <p class="small muted">Chiffres d'exemple. Les 3 premiers noms de chaque liste sont gratuits. Les autres t'attendent.</p>
     </div>
 
     <div class="sec scenes">
       <h2>Ton ex. Ton crush. Ton meilleur pote.</h2>
-      <p>Tu sais enfin qui te suit vraiment. Et tu décides quoi faire.</p>
+      <p>Tu sais enfin qui te suit vraiment, et depuis quand. Après, tu fais le tri.</p>
       <button class="btn block xl" data-go="viewImport" style="background:var(--bg);color:var(--fg)">Voir mes lâcheurs</button>
     </div>
 
@@ -364,7 +374,7 @@ label.consent input { margin-top: 3px; }
   <!-- ===== DASHBOARD ===== -->
   <section class="view" id="viewDash">
     <div class="profile">
-      <div class="who"><div class="avatar" id="acctAvatar">?</div><div><b id="acctPill">@compte</b><span class="small muted" id="snapInfo"></span></div></div>
+      <div class="who"><span class="sring"><div class="avatar" id="acctAvatar">?</div></span><div><b id="acctPill">@compte</b><span class="small muted" id="snapInfo"></span></div></div>
       <div id="demoBanner" class="err" hidden>Compte fictif pour la démo. Dépose ton vrai fichier pour voir tes chiffres.</div>
       <div class="counts">
         <button class="accent tile" data-tab="lacheurs"><b class="num" id="tLacheurs">0</b><span>t'ont lâché</span></button>
@@ -397,7 +407,7 @@ label.consent input { margin-top: 3px; }
 <div class="modal" id="paywall" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
   <div class="sheet">
     <div class="handle"></div>
-    <h2 id="pwTitle">Vois tous les noms</h2>
+    <h2 id="pwTitle">Démasque-les tous</h2>
     <p class="muted" id="pwSub">Le nettoyage guidé pour te désabonner en un tap, tous les noms de chaque liste, la comparaison entre tes imports et la carte sans filigrane.</p>
     <div class="price-grid" id="pwPlans"></div>
     <label class="consent"><input type="checkbox" id="consent"><span>Je demande que le service commence immédiatement et je reconnais perdre mon droit de rétractation de 14 jours une fois le contenu débloqué.</span></label>
@@ -603,7 +613,7 @@ function personRow(e, opts = {}) {
   const initial = esc(e.name[0] || '?').toUpperCase();
   const sub = opts.sub ? `<span>${esc(opts.sub)}</span>` : '';
   const chip = opts.chip || 'Voir';
-  return `<div class="person"><div class="avatar">${initial}</div><div class="who"><b>${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
+  return `<div class="person"><span class="sring"><div class="avatar">${initial}</div></span><div class="who"><b>${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
 }
 function lockedRow(i) { const w = 45 + ((i * 37) % 40); return `<div class="person locked"><div class="avatar">·</div><div class="who"><div class="bar" style="width:${w}%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>`; }
 function renderList(items, subFn, emptyMsg, extra = () => ({})) {
@@ -613,7 +623,7 @@ function renderList(items, subFn, emptyMsg, extra = () => ({})) {
   if (!state.premium && items.length > CONFIG.freeNames) {
     const rest = items.length - CONFIG.freeNames;
     html += Array.from({ length: Math.min(rest, 4) }, (_, i) => lockedRow(i)).join('');
-    html += `</div><div class="lock-cta"><p><b>${plural(rest, 'autre nom caché', 'autres noms cachés')}</b></p><button class="btn primary block" data-open-paywall>Voir tous les noms</button></div>`;
+    html += `</div><div class="lock-cta"><p><b>${plural(rest, 'autre nom caché', 'autres noms cachés')}</b><br><span class="small muted">Tu les connais sûrement.</span></p><button class="btn primary block" data-open-paywall>${rest === 1 ? 'Démasquer le dernier' : `Démasquer les ${rest} autres`}</button></div>`;
   } else html += '</div>';
   return html;
 }
@@ -857,6 +867,7 @@ document.addEventListener('click', (ev) => {
   if (t.id === 'btnActivate') { activateLicense($('#licenseKey').value.trim()); return; }
   if (t.dataset.legal) { openSheet(LEGAL[t.dataset.legal]); return; }
   if (t.id === 'btnMyData') { openSheet(LEGAL.imports()); return; }
+  if (t.id === 'btnFeedback') { openSheet(`<h2>Ton avis en 30 secondes</h2><div class="legal"><p>Réponds à Aaron sur WhatsApp ou Snap, juste ces 4 questions :</p><ol style="padding-left:20px;display:grid;gap:6px"><li>T'as compris en 5 secondes à quoi ça sert ?</li><li>Tu irais chercher ton fichier Insta pour l'essayer ? Si non, pourquoi ?</li><li>Tu paierais 4,99 € pour voir tous les noms ? Et 29,99 € à l'année ?</li><li>Qu'est-ce qui te fait pas confiance ?</li></ol><p>Teste avec la démo (bouton « Voir une démo ») ou avec ton vrai fichier : il reste sur ton téléphone.</p></div>`); return; }
   if (t.id === 'btnRemind' || t.id === 'btnRemind2') { reminder(); return; }
   if (t.id === 'btnWipe') { store.keys().filter(k => k.startsWith('lacheurs:') && !['lacheurs:license', 'lacheurs:premium', 'lacheurs:aff'].includes(k)).forEach(k => store.del(k)); state.data = null; state.snapshots = []; toast('Imports effacés' + (state.premium ? ', Premium conservé' : '')); show('viewLanding'); $('#btnMyData').hidden = true; return; }
   if (t.dataset.done != null) { if (!state.premium) { openPaywall(); return; } const k = 'lacheurs:done:' + state.account; const d = store.get(k, {}); d[t.dataset.done] = !d[t.dataset.done]; store.set(k, d); renderPanel(); return; }
