@@ -84,6 +84,8 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 
 /* Avatars + anneau story */
 .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-weight: 700; color: var(--muted); flex: none; border: 1px solid var(--line); }
+.avatar.photo { overflow: hidden; border-color: transparent; }
+.avatar.photo img { width: 100%; height: 100%; object-fit: cover; filter: blur(2.2px); transform: scale(1.18); display: block; }
 .sring { display: inline-flex; padding: 4px; border-radius: 50%; background: var(--ring); flex: none; }
 .sring .avatar { box-shadow: 0 0 0 2px var(--bg); border-color: transparent; }
 .sring.live { background: var(--ring-conic); animation: spin 6s linear infinite; }
@@ -292,12 +294,14 @@ label.consent input { margin-top: 3px; }
           <div class="ptabs"><b><span class="num" data-count="16">0</span> sans retour</b><span><span class="num" data-count="6">0</span> lâcheurs</span></div>
           <div class="psearch">Rechercher</div>
           <div class="list anim" id="heroList">
-            <div class="person"><span class="sring"><div class="avatar">L</div></span><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans. Elle, non.</small></div><span class="chip">Abonné(e)</span></div>
-            <div class="person"><span class="sring"><div class="avatar">T</div></span><div class="who"><b>tom_d•••</b><small>T'a unfollow il y a 5 jours</small></div><span class="chip red">Parti</span></div>
-            <div class="person"><span class="sring"><div class="avatar">H</div></span><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip">Abonné(e)</span></div>
-            <div class="person"><span class="sring"><div class="avatar">M</div></span><div class="who"><b>manon_•••</b><small>T'a unfollow il y a 12 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="0"></div></span><div class="who"><b>lea.m•••</b><small>Tu la suis depuis 2 ans. Elle, non.</small></div><span class="chip ">Abonné(e)</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="1"></div></span><div class="who"><b>tom_d•••</b><small>T'a unfollow il y a 5 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="2"></div></span><div class="who"><b>ines.b•••</b><small>T'a unfollow il y a 2 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="3"></div></span><div class="who"><b>hugo.v•••</b><small>Ne t'a jamais suivi en retour</small></div><span class="chip ">Abonné(e)</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="4"></div></span><div class="who"><b>manon_•••</b><small>T'a unfollow il y a 12 jours</small></div><span class="chip red">Parti</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="5"></div></span><div class="who"><b>enzo.g•••</b><small>Tu le suis depuis 8 mois. Lui, non.</small></div><span class="chip ">Abonné(e)</span></div>
+            <div class="person"><span class="sring"><div class="avatar photo" data-face="6"></div></span><div class="who"><b>chloe.d•••</b><small>T'a unfollow hier</small></div><span class="chip red">Parti</span></div>
             <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:55%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>
-            <div class="person locked"><div class="avatar"></div><div class="who"><div class="bar" style="width:70%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>
           </div>
           <div class="fade"></div>
         </div>
@@ -334,7 +338,7 @@ label.consent input { margin-top: 3px; }
     <div class="sec rv">
       <h2>Ce que tu vas voir</h2>
       <div class="preview">
-        <div class="head"><span class="sring live"><div class="avatar">T</div></span><div><b>toncompte</b><small>Import du jour · exemple</small></div></div>
+        <div class="head"><span class="sring live"><div class="avatar photo" data-face="9"></div></span><div><b>toncompte</b><small>Import du jour · exemple</small></div></div>
         <div class="counts">
           <div class="accent"><b class="num" data-count="16">0</b><span>sans retour</span></div>
           <div class="accent"><b class="num" data-count="6">0</b><span>t'ont lâché</span></div>
@@ -658,6 +662,28 @@ function computeLacheurs(a, snaps, period) {
   return { list, baseline, exact: older.length > 0 };
 }
 
+/* ---------- faux portraits (dessinés, flous) ---------- */
+function faceDataUrl(seed) {
+  const c = document.createElement('canvas'); c.width = 96; c.height = 96; const x = c.getContext('2d');
+  let h = 2166136261; for (const ch of String(seed)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const r = () => { h = (Math.imul(h, 1664525) + 1013904223) >>> 0; return h / 4294967296; };
+  const bgs = ['#9DB7D5', '#C9A77C', '#7FA88F', '#D9B1B1', '#8C8CB8', '#E0C9A6', '#6E8FA3', '#B8A0C8', '#A3B86E'];
+  x.fillStyle = bgs[Math.floor(r() * bgs.length)]; x.fillRect(0, 0, 96, 96);
+  x.fillStyle = `rgba(255,255,255,${0.15 + r() * 0.2})`; x.beginPath(); x.arc(20 + r() * 56, 18 + r() * 30, 14 + r() * 22, 0, 7); x.fill();
+  const skins = ['#F1C9A5', '#E0AC86', '#C68B5C', '#A86B45', '#7D4E33', '#5B3A26', '#F5D7C0'];
+  const skin = skins[Math.floor(r() * skins.length)];
+  const hairs = ['#1F1A17', '#3B2A1E', '#6B4A2B', '#A3703E', '#D9B06B', '#2C2C2C', '#8A3B2B'];
+  const hair = hairs[Math.floor(r() * hairs.length)];
+  x.fillStyle = skin; x.beginPath(); x.ellipse(48, 96, 34 + r() * 8, 26, 0, Math.PI, 0); x.fill(); // épaules
+  x.fillStyle = `rgba(0,0,0,.08)`; x.fillRect(0, 70, 96, 26);
+  x.fillStyle = skin; x.beginPath(); x.ellipse(48, 44, 17 + r() * 3, 21 + r() * 3, 0, 0, 7); x.fill(); // visage
+  x.fillStyle = hair; x.beginPath(); x.ellipse(48, 30, 20 + r() * 3, 14 + r() * 6, 0, Math.PI, 0); x.fill(); // cheveux
+  if (r() > .5) { x.beginPath(); x.ellipse(48, 46, 23, 24 + r() * 10, 0, 0, Math.PI); x.fillStyle = hair; x.globalAlpha = .9; x.fill(); x.globalAlpha = 1; x.fillStyle = skin; x.beginPath(); x.ellipse(48, 46, 15, 19, 0, 0, 7); x.fill(); }
+  x.fillStyle = 'rgba(0,0,0,.35)'; x.beginPath(); x.arc(41, 44, 1.8, 0, 7); x.arc(55, 44, 1.8, 0, 7); x.fill();
+  return c.toDataURL('image/png');
+}
+function faceImg(seed) { return `<img src="${faceDataUrl(seed)}" alt="">`; }
+
 /* ---------- rendering ---------- */
 // Lien de paiement + code affilié (lacheurs.fr/?aff=prenom → Lemon Squeezy Affiliate Hub)
 function checkoutUrl(p) {
@@ -676,7 +702,8 @@ function personRow(e, opts = {}) {
   const initial = esc(e.name[0] || '?').toUpperCase();
   const sub = opts.sub ? `<span>${esc(opts.sub)}</span>` : '';
   const chip = opts.chip || 'Voir';
-  return `<div class="person"><span class="sring"><div class="avatar">${initial}</div></span><div class="who"><b>${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
+  const av = state.demo ? `<div class="avatar photo">${faceImg(e.name)}</div>` : `<div class="avatar">${initial}</div>`;
+  return `<div class="person"><span class="sring">${av}</span><div class="who"><b>${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
 }
 function lockedRow(i) { const w = 45 + ((i * 37) % 40); return `<div class="person locked"><div class="avatar">·</div><div class="who"><div class="bar" style="width:${w}%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>`; }
 function renderList(items, subFn, emptyMsg, extra = () => ({})) {
@@ -791,7 +818,7 @@ function openDashboard(exports, demo = false) {
   state.currentDate = latest.date; state.currentDay = dayOf(latest.date);
   if (demo) state.snapshots = demoSnapshots(a);
   else { exports.slice(0, -1).forEach(e => saveSnapshot(state.account, analyze(e.buckets), e.date)); state.snapshots = saveSnapshot(state.account, a, latest.date); }
-  $('#acctPill').textContent = state.account; $('#acctAvatar').textContent = (state.account[0] || '?').toUpperCase();
+  $('#acctPill').textContent = state.account; const aa = $('#acctAvatar'); aa.classList.toggle('photo', demo); aa.innerHTML = demo ? faceImg('demo-moi') : (state.account[0] || '?').toUpperCase();
   $('#demoBanner').hidden = !demo;
   const prior = state.snapshots.filter(s => s.day !== state.currentDay);
   const when = daysAgo(latest.date) > 0 ? ` · export du ${fmtDate(latest.date)}` : '';
@@ -964,6 +991,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePaywa
     const cio = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { countUp(en.target, +en.target.dataset.count, 1100); cio.unobserve(en.target); } }));
     $$('[data-count]').forEach(el => cio.observe(el));
   } else { $$('[data-count]').forEach(el => el.textContent = el.dataset.count); }
+  $$('[data-face]').forEach(el => { el.innerHTML = faceImg('face-' + el.dataset.face); });
   updateSticky();
 })();
 </script>
