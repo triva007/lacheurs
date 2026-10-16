@@ -148,21 +148,6 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 .il-ico { width: 56px; height: 56px; color: var(--fg); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .il-ico .dash { stroke-dasharray: 2 2.2; }
 .il-ico .file { fill: var(--surface); }
-.il-vs { display: grid; grid-template-columns: 1fr 1fr; }
-.il-vs-col { display: grid; justify-items: center; align-content: start; gap: 4px; padding: 16px 8px; text-align: center; }
-.il-vs-col + .il-vs-col { border-left: 1px solid var(--line); }
-.il-vs-col h4 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
-.il-vs-col + .il-vs-col h4 { color: var(--fg); }
-.il-vs-col svg { width: 120px; height: 56px; color: var(--fg); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 8px; }
-.il-vs-col b { font-size: 13px; font-weight: 600; }
-.il-vs-col small { font-size: 12px; color: var(--muted); line-height: 1.3; }
-.il-vs .bad { color: var(--accent); }
-.il-vs .good { color: var(--blue); }
-.il-vs .dot { fill: currentColor; stroke: none; }
-.il-vs .lock { color: var(--accent); }
-.il-vs .ok { color: var(--blue); }
-.il-vs .ok circle { fill: var(--surface); }
-.il-vs .il-check { stroke-width: 2; stroke-dasharray: 16; stroke-dashoffset: 0; }
 .il-profile { border: 1px solid var(--line); border-radius: 20px; padding: 16px 16px 0; display: grid; gap: 12px; overflow: hidden; }
 .il-id { display: grid; gap: 1px; }
 .il-id b { font-size: 16px; }
@@ -200,13 +185,9 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
   @keyframes il-blink { to { opacity: 0; } }
   .il-ico .drop-file { animation: il-dropin 4.5s var(--ease) infinite; transform-box: fill-box; transform-origin: center; }
   @keyframes il-dropin { 0% { opacity: 0; transform: translateY(-5px); } 22%, 72% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: translateY(-5px); } }
-  .il-vs.in .dot { animation: il-dot 6s linear 1; animation-delay: calc(var(--i, 0) * .12s); }
   @keyframes il-dot { 0% { opacity: 0; } 4%, 100% { opacity: 1; } }
-  .il-vs.in .lock { animation: il-pop .6s var(--ease) 1s both; transform-box: fill-box; transform-origin: center; }
   @keyframes il-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
-  .il-vs.in .il-check { animation: il-draw .8s var(--ease) .6s both; }
   @keyframes il-draw { from { stroke-dashoffset: 16; } to { stroke-dashoffset: 0; } }
-  .il-vs:not(.in) .lock { opacity: 0; } .il-vs:not(.in) .il-check { stroke-dashoffset: 16; }
 }
 
 /* ===== Landing ===== */
@@ -221,15 +202,12 @@ header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; 
 .pain-list li:last-child { border-bottom: 1px solid var(--line); }
 .pain-list i { font-style: normal; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 22px; }
 .punch { font-size: 17px; line-height: 22px; font-weight: 600; }
-.compare { display: grid; font-size: 14px; }
-.compare .r { display: grid; grid-template-columns: 1fr 88px 88px; align-items: center; border-top: 1px solid var(--line); padding: 10px 0; gap: 8px; }
-.compare .r:last-child { border-bottom: 1px solid var(--line); }
-.compare .r > :first-child { color: var(--muted); }
-.compare .h { color: var(--muted); font-size: 13px; border-top: 0; padding-top: 0; }
-.compare .h > :first-child { color: transparent; }
-.compare .no { color: var(--muted); }
-.compare .us { font-weight: 600; }
-.compare .us::before { content: "✓ "; color: var(--blue); }
+.suspects { border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; }
+.suspects .il-row { animation: none; padding: 8px 0; }
+.secret { display: flex; gap: 12px; align-items: flex-start; padding-top: 4px; }
+.secret svg { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--fg); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin-top: 1px; }
+.secret b { display: block; font-size: 15px; line-height: 22px; }
+.secret span { display: block; font-size: 13px; line-height: 18px; color: var(--muted); }
 .scenes { text-align: center; display: grid; gap: 16px; justify-items: center; }
 .scenes p { color: var(--muted); font-size: 16px; line-height: 24px; max-width: 32ch; }
 .pricing-box { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
@@ -251,9 +229,6 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
 footer .links { display: flex; flex-wrap: wrap; gap: 8px 16px; }
 footer button { background: none; border: 0; color: var(--muted); padding: 0; font-size: 13px; }
 footer button:hover { color: var(--fg); }
-.sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in oklab, var(--bg) 92%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform .25s var(--ease); }
-.sticky-cta.show { transform: none; }
-.sticky-cta .btn { height: 48px; max-width: 520px; margin: 0 auto; display: flex; }
 
 /* ===== Quiz ===== */
 .quiz { display: grid; gap: 20px; padding-block: 8px; }
@@ -427,19 +402,19 @@ label.consent input { margin-top: 2px; }
     </div>
 
     <div class="sec">
-      <h2>3 étapes, 2 minutes</h2>
+      <h2>2 minutes, c'est tout</h2>
       <div class="il-steps">
         <div class="il-step">
-          <svg class="il-ico" viewBox="0 0 24 24" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M6.75 2.75h7.5l4 4v13.5a1 1 0 0 1-1 1h-10.5a1 1 0 0 1-1-1v-16.5a1 1 0 0 1 1-1z"/><path vector-effect="non-scaling-stroke" d="M14.25 2.75v4h4"/><path vector-effect="non-scaling-stroke" d="M12 10v7.25M9 14.5l3 3 3-3"/></svg>
-          <small>1</small><b>Demande ton fichier à Insta</b><p>Un bouton t'emmène au bon endroit.</p>
+          <svg class="il-ico" viewBox="0 0 24 24" aria-hidden="true"><rect vector-effect="non-scaling-stroke" x="6.75" y="2.75" width="10.5" height="18.5" rx="2.25"/><path vector-effect="non-scaling-stroke" d="M10.5 18.25h3"/></svg>
+          <small>1</small><b>Tu lances l'analyse</b><p>Depuis ton tel, sans mot de passe.</p>
         </div>
         <div class="il-step">
-          <svg class="il-ico" viewBox="0 0 24 24" aria-hidden="true"><rect class="dash" vector-effect="non-scaling-stroke" x="2.75" y="5.75" width="18.5" height="14.5" rx="2"/><g class="drop-file"><path class="file" vector-effect="non-scaling-stroke" d="M9.25 8.25h3.75l2.75 2.75v6.25a.75.75 0 0 1-.75.75h-5.75a.75.75 0 0 1-.75-.75v-8.25a.75.75 0 0 1 .75-.75z"/><path vector-effect="non-scaling-stroke" d="M13 8.25v2.75h2.75"/></g></svg>
-          <small>2</small><b>Dépose-le ici</b><p>Il reste sur ton téléphone.</p>
+          <svg class="il-ico" viewBox="0 0 24 24" aria-hidden="true"><circle vector-effect="non-scaling-stroke" cx="9" cy="12" r="6.25"/><circle vector-effect="non-scaling-stroke" cx="15" cy="12" r="6.25"/></svg>
+          <small>2</small><b>On croise tout</b><p>Abonnés, abonnements, demandes.</p>
         </div>
         <div class="il-step">
           <svg class="il-ico" viewBox="0 0 24 24" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3.5 5.25h.01M7 5.25h12M3.5 11h.01M7 11h12M3.5 16.75h.01M7 16.75h3.5"/><circle vector-effect="non-scaling-stroke" cx="16" cy="16.75" r="3.75"/><path vector-effect="non-scaling-stroke" d="M18.75 19.5l2.75 2.75"/></svg>
-          <small>3</small><b>Tu vois tout</b><p>Sans retour, fans, lâcheurs.</p>
+          <small>3</small><b>Tu vois les noms</b><p>Lâcheurs, sans retour, fans.</p>
         </div>
       </div>
       <button class="btn primary block" data-go="viewImport">Je veux les noms</button>
@@ -450,7 +425,7 @@ label.consent input { margin-top: 2px; }
       <div class="il-profile" aria-label="Aperçu de ton résultat">
         <div class="il-ph">
           <span class="il-ring lg"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f7"/></svg></span></span>
-          <div class="il-id"><b>toncompte</b><span>Import du jour · exemple</span></div>
+          <div class="il-id"><b>toncompte</b><span>Analyse du jour · exemple</span></div>
         </div>
         <div class="il-counts">
           <div><b data-count="16">16</b><span>sans retour</span></div>
@@ -470,29 +445,19 @@ label.consent input { margin-top: 2px; }
     </div>
 
     <div class="sec">
-      <h2>Les applis du store vs Lâcheurs</h2>
-      <div class="il-vs" id="ilVs" role="img" aria-label="Les applis du store demandent ton mot de passe et font restreindre ton compte. Lâcheurs lit ton export officiel sur ton téléphone.">
-        <div class="il-vs-col">
-          <h4>Applis du store</h4>
-          <svg viewBox="0 0 120 56" aria-hidden="true"><rect x="1.75" y="12.75" width="116.5" height="30.5" rx="8"/><circle class="dot" style="--i:0" cx="16" cy="28" r="2.4"/><circle class="dot" style="--i:1" cx="26" cy="28" r="2.4"/><circle class="dot" style="--i:2" cx="36" cy="28" r="2.4"/><circle class="dot" style="--i:3" cx="46" cy="28" r="2.4"/><circle class="dot" style="--i:4" cx="56" cy="28" r="2.4"/><circle class="dot" style="--i:5" cx="66" cy="28" r="2.4"/><g class="lock"><path d="M94.75 26.25v-3.5a6.25 6.25 0 0 1 12.5 0v3.5"/><rect x="91.75" y="26.25" width="18.5" height="12.5" rx="2.5"/><path stroke-width="1.75" d="M101 29.5v3.25"/><circle cx="101" cy="35.6" r=".9" fill="currentColor" stroke="none"/></g></svg>
-          <b class="bad">Compte restreint</b>
-          <small>Mot de passe demandé</small>
-        </div>
-        <div class="il-vs-col">
-          <h4>Lâcheurs</h4>
-          <svg viewBox="0 0 120 56" aria-hidden="true"><path d="M46.75 2.75h17.5l12 12v35.5a1.5 1.5 0 0 1-1.5 1.5h-28a1.5 1.5 0 0 1-1.5-1.5v-46a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M64.25 2.75v12h12"/><path d="M55.5 7v3M55.5 14v3M55.5 21v3"/><rect x="52.75" y="27.75" width="5.5" height="7.5" rx="1.25"/><g class="ok"><circle cx="76" cy="46" r="8.25"/><path class="il-check" d="M71.75 46l3 3 5.5-6"/></g></svg>
-          <b class="good">Analysé sur ton tel</b>
-          <small>Export officiel, zéro login</small>
-        </div>
+      <h2>Qui tu vas démasquer</h2>
+      <p class="muted">Spoiler : y'a toujours quelqu'un que t'attendais pas.</p>
+      <ul class="il-list suspects">
+        <li class="il-row"><span class="il-ring"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f2"/></svg></span></span><span class="il-who"><b>Ton pote de soirée</b><small>T'a unfollow il y a 3 semaines</small></span><span class="il-chip gone">Parti</span></li>
+        <li class="il-row"><span class="il-ring"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f1"/></svg></span></span><span class="il-who"><b>Ton crush</b><small>T'a jamais suivi en retour</small></span><span class="il-chip">Abonné(e)</span></li>
+        <li class="il-row"><span class="il-ring"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f6"/></svg></span></span><span class="il-who"><b>Ton ex</b><small>T'a unfollow le lendemain</small></span><span class="il-chip gone">Parti</span></li>
+        <li class="il-row"><span class="il-ring"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f3"/></svg></span></span><span class="il-who"><b>Ton date</b><small>Ignore ta demande depuis 8 mois</small></span><span class="il-chip">Demandé(e)</span></li>
+        <li class="il-row"><span class="il-ring"><span class="il-av"><svg class="il-face" viewBox="0 0 40 40" aria-hidden="true"><use href="#il-f4"/></svg></span></span><span class="il-who"><b>L'influ que tu stalkes</b><small>Te suit pas depuis 2 ans</small></span><span class="il-chip">Abonné(e)</span></li>
+      </ul>
+      <div class="secret">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c5 0 9 4.5 10 7-.4 1-1.3 2.4-2.6 3.7M6.6 6.6C4.6 7.9 3.2 9.8 2 12c1 2.5 5 7 10 7 1.9 0 3.6-.6 5-1.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+        <div><b>Ils ne sauront jamais que t'as regardé.</b><span>Aucune notif, aucune trace sur ton compte, rien de publié.</span></div>
       </div>
-      <div class="compare">
-        <div class="r h"><div>·</div><div>Store</div><div>Lâcheurs</div></div>
-        <div class="r"><div>Ton mot de passe</div><div class="no">Demandé</div><div class="us">Jamais</div></div>
-        <div class="r"><div>Risque de blocage</div><div class="no">Réel</div><div class="us">Zéro</div></div>
-        <div class="r"><div>Sans retour</div><div class="no">Payant</div><div class="us">Gratuit</div></div>
-        <div class="r"><div>Tes données</div><div class="no">Chez eux</div><div class="us">Ton tel</div></div>
-      </div>
-      <p class="small muted">Les applis qui se connectent à ta place sont détectées par Instagram. Des comptes se font restreindre ou bloquer pour ça. Ici, tu utilises le bouton officiel « Télécharger vos informations ».</p>
     </div>
 
     <div class="sec scenes">
@@ -508,17 +473,17 @@ label.consent input { margin-top: 2px; }
 
     <div class="sec">
       <h2>Gratuit pour commencer</h2>
-      <p class="muted small">Tes chiffres, 3 noms par liste, ta courbe et ta carte à partager : gratuit. Premium pour tous les noms, le nettoyage guidé et la comparaison entre imports.</p>
+      <p class="muted small">Tes chiffres, 3 noms par liste, ta courbe et ta carte à partager : gratuit. Premium pour tous les noms, le nettoyage guidé et le suivi de ceux qui partent.</p>
       <div class="pricing-box" id="landingPlans"></div>
     </div>
 
     <div class="sec faq">
       <h2>Questions</h2>
-      <details><summary>Je risque un ban ?</summary><p>Non. Tu utilises uniquement l'export officiel de tes données, prévu par Instagram. Aucune connexion automatique, aucune action sur ton compte.</p></details>
+      <details><summary>Je risque un ban ?</summary><p>Non. On ne se connecte jamais à ton compte et on ne fait aucune action dessus. Pour Insta, il ne se passe rien.</p></details>
       <details><summary>Vous avez mon mot de passe ?</summary><p>Non, jamais. Tu ne le tapes nulle part ici. Si un site ou une appli te le demande pour « voir qui t'a unfollow », ferme-le.</p></details>
       <details><summary>C'est vraiment gratuit ?</summary><p>Oui : tes chiffres, les 3 premiers noms de chaque liste, ta courbe et ta carte à partager. Premium sert à voir tous les noms et à nettoyer ta liste.</p></details>
-      <details><summary>Mes données vont où ?</summary><p>Nulle part. Le fichier est lu dans ton navigateur et tes listes restent dans la mémoire de ton téléphone. Garde tes fichiers Instagram dans tes emails : tu pourras toujours les redéposer ensemble.</p></details>
-      <details><summary>Pourquoi je ne vois pas tout de suite qui s'est désabonné ?</summary><p>Instagram ne garde pas cette liste, et aucun outil au monde ne peut la retrouver. Lâcheurs compare deux fichiers pris à des dates différentes. Si tu as déjà téléchargé tes données un jour, dépose l'ancien fichier avec le nouveau : tu vois tout de suite qui est parti. Sinon, ton premier import sert de point de départ.</p></details>
+      <details><summary>Mes données vont où ?</summary><p>Nulle part. L'analyse se fait directement sur ton téléphone. Rien n'est envoyé ni stocké chez nous.</p></details>
+      <details><summary>Je vois aussi ceux qui sont partis avant ?</summary><p>Ça dépend de ton historique : si t'as déjà récupéré tes données Insta par le passé, oui. Sinon, ta première analyse sert de point de départ et dès la suivante tu vois exactement qui est parti.</p></details>
     </div>
 
     <footer>
@@ -638,7 +603,6 @@ label.consent input { margin-top: 2px; }
   </section>
 </div>
 
-<div class="sticky-cta" id="stickyCta"><button class="btn primary block" data-go="viewImport">Démasquer mes lâcheurs</button></div>
 
 <!-- ===== PAYWALL ===== -->
 <div class="modal" id="paywall" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
@@ -705,13 +669,7 @@ const daysAgo = ts => Math.round((Date.now() - ts) / 86400000);
 const since = ts => { const d = daysAgo(ts); if (d < 1) return "aujourd'hui"; if (d < 30) return `il y a ${plural(d, 'jour', 'jours')}`; if (d < 365) return `il y a ${plural(Math.round(d / 30), 'mois', 'mois')}`; return `il y a ${plural(Math.round(d / 365), 'an', 'ans')}`; };
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
 function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); updateSticky(); if (view === 'viewImport') showWait(); }
-const stickyState = { heroOut: false, endIn: false };
-function updateSticky() { const on = $('#viewLanding').classList.contains('active') && stickyState.heroOut && !stickyState.endIn; $('#stickyCta').classList.toggle('show', on); }
-function watchSticky() {
-  if (!('IntersectionObserver' in window)) { window.addEventListener('scroll', () => { stickyState.heroOut = window.scrollY > 420; updateSticky(); }, { passive: true }); return; }
-  new IntersectionObserver(([en]) => { stickyState.heroOut = !en.isIntersecting && en.boundingClientRect.top < 0; updateSticky(); }).observe($('#ctaStart'));
-  new IntersectionObserver(entries => { stickyState.endIn = entries.some(en => en.isIntersecting); updateSticky(); }).observe($('.scenes .btn'));
-}
+function updateSticky() {}
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function countUp(el, to, ms = 900) {
   if (!el) return; if (reduceMotion || to < 2) { el.textContent = to; return; }
@@ -1209,14 +1167,13 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePaywa
   if (CONFIG.cfAnalyticsToken) { const s = document.createElement('script'); s.defer = true; s.src = 'https://static.cloudflareinsights.com/beacon.min.js'; s.setAttribute('data-cf-beacon', JSON.stringify({ token: CONFIG.cfAnalyticsToken })); document.body.appendChild(s); }
   const keys = store.keys().filter(k => k.startsWith('lacheurs:snap:')); if (keys.length) $('#btnMyData').hidden = false;
   // Motion : compteurs une fois à l'entrée dans l'écran ; anneau du milieu qui passe au gris ; cadenas et coche du comparatif
-  watchSticky();
   if ('IntersectionObserver' in window && !reduceMotion) {
     const cio = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { countUp(en.target, +en.target.dataset.count, 700); cio.unobserve(en.target); } }));
     $$('[data-count]').forEach(el => { el.textContent = '0'; cio.observe(el); });
     const once = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { setTimeout(() => en.target.classList.add('in'), 300); once.unobserve(en.target); } }), { rootMargin: '0px 0px -20% 0px' });
-    ['#trio', '#ilVs'].forEach(s => $(s) && once.observe($(s)));
+    $('#trio') && once.observe($('#trio'));
     setTimeout(() => $$('[data-count]').forEach(el => { if (el.textContent === '0' && +el.dataset.count) { countUp(el, +el.dataset.count, 700); cio.unobserve(el); } }), 2500);
-  } else { $$('[data-count]').forEach(el => el.textContent = el.dataset.count); ['#trio', '#ilVs'].forEach(s => $(s) && $(s).classList.add('in')); }
+  } else { $$('[data-count]').forEach(el => el.textContent = el.dataset.count); $('#trio') && $('#trio').classList.add('in'); }
   const w = store.get('lacheurs:wait', null); if (w && w.at && Date.now() - w.at > 3 * 60000) $('#returnBanner').hidden = false;
   updateSticky();
 })();
