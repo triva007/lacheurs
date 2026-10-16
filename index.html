@@ -209,6 +209,39 @@ footer button { background: none; border: 0; color: var(--muted); padding: 0; te
 .sticky-cta .inner { max-width: 520px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
 .sticky-cta .inner span { flex: 1; min-width: 0; font-size: 13px; color: var(--muted); }
 
+/* Illustrations dessinées (pas de photos) */
+.drop-demo { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; box-shadow: var(--shadow); }
+.dd-head { display: flex; align-items: center; gap: 12px; } .dd-head b { display: block; font-size: 15px; } .dd-head small { color: var(--muted); font-size: 12px; }
+.dd-counts { display: grid; grid-template-columns: 1fr 1.3fr 1fr; text-align: center; align-items: end; }
+.dd-counts b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; position: relative; } .dd-counts span { font-size: 12px; color: var(--muted); }
+.dd-main b { font-size: 34px; } .dd-main b > span { font-size: inherit; color: inherit; } .dd-main em { font-style: normal; font-size: 13px; color: #fff; background: var(--accent); border-radius: 999px; padding: 2px 7px; position: absolute; top: -10px; right: -4px; opacity: 0; transform: scale(.6); animation: pop 6s var(--ease) infinite; }
+@keyframes pop { 0%, 38% { opacity: 0; transform: scale(.6); } 46%, 85% { opacity: 1; transform: scale(1); } 95%, 100% { opacity: 0; transform: scale(.6); } }
+.dd-q { font-weight: 700; font-size: 18px; color: var(--accent); text-align: center; } .dd-blink { animation: blink 1s steps(2) infinite; } @keyframes blink { to { opacity: 0; } }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vs-col { border-radius: 14px; padding: 14px 12px; display: grid; gap: 10px; align-content: start; font-size: 13px; }
+.vs-col.bad { background: color-mix(in oklab, var(--accent) 8%, var(--surface)); border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line)); }
+.vs-col.good { background: color-mix(in oklab, var(--green) 8%, var(--surface)); border: 1px solid color-mix(in oklab, var(--green) 35%, var(--line)); }
+.vs-field { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 2px; animation: shake 5s ease-in-out infinite; } .vs-field span { font-size: 11px; color: var(--muted); } .vs-field i { font-style: normal; letter-spacing: 2px; font-weight: 700; }
+@keyframes shake { 0%, 60%, 100% { transform: none; } 63% { transform: translateX(-4px); } 66% { transform: translateX(4px); } 69% { transform: translateX(-3px); } 72% { transform: translateX(0); } }
+.vs-alert { background: var(--accent); color: #fff; border-radius: 8px; padding: 8px 10px; font-weight: 700; text-align: center; animation: alertIn 5s var(--ease) infinite; }
+@keyframes alertIn { 0%, 70% { opacity: 0; transform: translateY(6px); } 78%, 100% { opacity: 1; transform: none; } }
+.vs-file { background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 8px 10px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vs-ok { background: var(--green); color: #fff; border-radius: 8px; padding: 8px 10px; font-weight: 700; text-align: center; }
+
+/* ===== Quiz ===== */
+.quiz { display: grid; gap: 18px; padding-block: 8px; }
+.qprog { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+.qprog i { display: block; height: 100%; width: 25%; background: var(--blue); transition: width .4s var(--ease); }
+.qstep { display: grid; gap: 14px; animation: viewIn .3s var(--ease) both; }
+.qopts { display: grid; gap: 8px; }
+.qopt { text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font-weight: 600; font-size: 15px; transition: border-color .15s, background .15s, transform .15s var(--ease); }
+.qopt:active { transform: scale(.98); }
+.qopt.on { border-color: var(--blue); background: color-mix(in oklab, var(--blue) 8%, var(--surface)); }
+.qdone { display: grid; justify-items: center; text-align: center; gap: 10px; padding-block: 10px; }
+.qdone .avatar { width: 72px; height: 72px; font-size: 28px; color: var(--green); }
+.ignore { font-size: 12px; color: var(--muted); background: none; border: 0; padding: 4px 6px; flex: none; }
+.ignore:hover { color: var(--fg); }
+
 /* ===== Import ===== */
 .drop { border: 2px dashed var(--line); border-radius: 14px; padding: 26px 16px; text-align: center; display: grid; gap: 8px; background: var(--surface); transition: border-color .2s, background .2s; }
 .drop.over { border-color: var(--blue); background: color-mix(in oklab, var(--blue) 8%, var(--surface)); }
@@ -280,6 +313,7 @@ label.consent input { margin-top: 3px; }
   <section class="view active" id="viewLanding">
     <div class="testbar"><span><b>Version test privée.</b> Dis-moi ce que t'en penses.</span><button class="btn sm" id="btnFeedback">Mon avis</button></div>
     <div class="trustbar"><span>Sans mot de passe</span><span>Export officiel</span><span>Gratuit</span></div>
+    <div class="err" id="returnBanner" hidden style="margin-bottom:14px"><b>Ton fichier Insta est sûrement prêt.</b> <button class="btn sm primary" data-go="viewImport" style="margin-left:6px">Le déposer</button></div>
 
     <div class="hero">
       <h1>Ils t'ont unfollow en scred.</h1>
@@ -327,7 +361,11 @@ label.consent input { margin-top: 3px; }
         </div>
         <p class="punch">Insta ne te dira jamais qui t'a lâché. Nous, si. Avec les noms.</p>
       </div>
-      <figure class="visual"><img src="media/visual.jpg" alt="" loading="lazy" onerror="this.parentElement.hidden=true"></figure>
+      <div class="drop-demo" aria-hidden="true">
+        <div class="dd-head"><span class="sring"><div class="avatar">T</div></span><div><b>toncompte</b><small>il y a 3 jours → aujourd'hui</small></div></div>
+        <div class="dd-counts"><div><b>42</b><span>publications</span></div><div class="dd-main"><b><span id="ddNum">512</span><em id="ddDelta">−3</em></b><span>abonnés</span></div><div><b>611</b><span>abonnements</span></div></div>
+        <div class="dd-q">Qui ? <span class="dd-blink">_</span></div>
+      </div>
     </div>
 
     <div class="sec rv">
@@ -363,7 +401,10 @@ label.consent input { margin-top: 3px; }
         <div class="r"><div>Qui ne te suit pas en retour</div><div class="bad">Payant</div><div class="us good">Gratuit</div></div>
         <div class="r"><div>Tes données</div><div class="bad">Sur leurs serveurs</div><div class="us good">Sur ton tel</div></div>
       </div>
-      <figure class="visual"><img src="media/safe.jpg" alt="" loading="lazy" onerror="this.parentElement.hidden=true"></figure>
+      <div class="vs" aria-hidden="true">
+        <div class="vs-col bad"><div class="vs-field"><span>Mot de passe</span><i>••••••••</i></div><div class="vs-alert">Compte restreint</div></div>
+        <div class="vs-col good"><div class="vs-file">instagram-toncompte-2026.zip</div><div class="vs-ok">Analysé sur ton tel</div></div>
+      </div>
       <p class="small muted">Les applis qui se connectent à ta place sont détectées par Instagram. Des comptes se font restreindre ou bloquer pour ça. Ici, tu utilises le bouton officiel « Télécharger vos informations ».</p>
     </div>
 
@@ -394,16 +435,55 @@ label.consent input { margin-top: 3px; }
     </footer>
   </section>
 
+  <!-- ===== QUIZ ===== -->
+  <section class="view" id="viewQuiz">
+    <div class="quiz">
+      <div class="qprog"><i id="qbar"></i></div>
+      <div class="qstep" data-q="1">
+        <h2>Tu veux savoir quoi en premier ?</h2>
+        <div class="qopts">
+          <button class="qopt" data-a="goal:sansretour">Qui ne me suit pas en retour</button>
+          <button class="qopt" data-a="goal:lacheurs">Qui s'est désabonné</button>
+          <button class="qopt" data-a="goal:fans">Qui me suit sans que je le suive</button>
+          <button class="qopt" data-a="goal:jamais">Qui ne m'a jamais accepté</button>
+        </div>
+      </div>
+      <div class="qstep" data-q="2" hidden>
+        <h2>Tu as combien d'abonnés, à peu près ?</h2>
+        <div class="qopts">
+          <button class="qopt" data-a="size:s">Moins de 500</button>
+          <button class="qopt" data-a="size:m">500 à 2 000</button>
+          <button class="qopt" data-a="size:l">2 000 à 10 000</button>
+          <button class="qopt" data-a="size:xl">Plus de 10 000</button>
+        </div>
+      </div>
+      <div class="qstep" data-q="3" hidden>
+        <h2>Tu as déjà téléchargé tes données Insta un jour ?</h2>
+        <div class="qopts">
+          <button class="qopt" data-a="old:yes">Oui, j'ai encore le fichier</button>
+          <button class="qopt" data-a="old:no">Non, jamais</button>
+          <button class="qopt" data-a="old:maybe">Peut-être, dans mes emails</button>
+        </div>
+      </div>
+      <div class="qstep" data-q="4" hidden>
+        <div class="qdone"><span class="sring live"><div class="avatar" id="quizAvatar">✓</div></span><h2 id="quizTitle">On prépare ton analyse.</h2><p class="muted" id="quizText"></p></div>
+        <button class="btn primary block xl" data-go="viewImport">Récupérer mon fichier</button>
+      </div>
+      <button class="btn ghost block sm" data-go="viewImport" id="quizSkip">Passer</button>
+    </div>
+  </section>
+
   <!-- ===== IMPORT ===== -->
   <section class="view" id="viewImport">
     <div class="stack">
+      <div class="err" id="waitBanner" hidden><b>Ta demande est partie chez Insta.</b> <span id="waitText"></span> Quand l'email arrive, télécharge le fichier et dépose-le ici.</div>
       <h2>Récupère ton fichier Instagram</h2>
       <p class="muted">Deux minutes, une seule fois par analyse.</p>
       <div class="guide">
         <div class="shot">
           <b>1. Ouvre la page de téléchargement</b>
           <p class="muted">Ce bouton ouvre directement la page officielle d'Instagram (connecte-toi si besoin).</p>
-          <a class="btn primary" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">Ouvrir la page Instagram</a>
+          <a class="btn primary" id="btnOpenIg" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">Ouvrir la page Instagram</a>
           <p class="muted small">Si le bouton ne s'ouvre pas : dans l'appli Instagram, Profil → ≡ → Espace Comptes → Vos informations et autorisations → Télécharger vos informations.</p>
         </div>
         <div class="shot">
@@ -531,7 +611,7 @@ const plural = (n, s, p) => n + ' ' + (n > 1 ? p : s);
 const daysAgo = ts => Math.round((Date.now() - ts) / 86400000);
 const since = ts => { const d = daysAgo(ts); if (d < 1) return "aujourd'hui"; if (d < 30) return `il y a ${plural(d, 'jour', 'jours')}`; if (d < 365) return `il y a ${plural(Math.round(d / 30), 'mois', 'mois')}`; return `il y a ${plural(Math.round(d / 365), 'an', 'ans')}`; };
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
-function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); updateSticky(); }
+function show(view) { $$('.view').forEach(v => v.classList.toggle('active', v.id === view)); window.scrollTo({ top: 0 }); updateSticky(); if (view === 'viewImport') showWait(); }
 function updateSticky() { const on = $('#viewLanding').classList.contains('active') && window.scrollY > 420; $('#stickyCta').classList.toggle('show', on); }
 window.addEventListener('scroll', updateSticky, { passive: true });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -648,7 +728,7 @@ function loadSnapshots(acct) { return store.get(snapshotKey(acct), []); }
 const dayOf = ts => new Date(ts).toISOString().slice(0, 10);
 function saveSnapshot(acct, a, date = Date.now()) {
   const snaps = loadSnapshots(acct);
-  const snap = { date, day: dayOf(date), followers: [...a.followers.keys()], following: [...a.following.keys()] };
+  const snap = { date, day: dayOf(date), followers: [...a.followers.values()].map(e => e.ts ? [e.name, e.ts] : e.name), following: [...a.following.keys()] };
   const idx = snaps.findIndex(s => s.day === snap.day);
   if (idx >= 0) snaps[idx] = snap; else snaps.push(snap);
   snaps.sort((x, y) => x.date - y.date);
@@ -664,7 +744,11 @@ function computeLacheurs(a, snaps, period) {
   const cutoff = (state.currentDate || Date.now()) - period * 86400000;
   const older = prior.filter(s => s.date <= cutoff);
   const baseline = older.length ? older[older.length - 1] : prior[0];
-  const list = baseline.followers.filter(n => !a.followers.has(n)).map(n => ({ name: n, ts: null, wasFollowing: baseline.following.includes(n) }));
+  const ignored = store.get('lacheurs:ignore:' + state.account, {});
+  const fset = new Set(baseline.following);
+  const list = baseline.followers.map(x => Array.isArray(x) ? { name: x[0], since: x[1] } : { name: x, since: null })
+    .filter(e => !a.followers.has(e.name) && !ignored[e.name])
+    .map(e => ({ name: e.name, ts: null, since: e.since, wasFollowing: fset.has(e.name), from: baseline.date, to: state.currentDate || Date.now() }));
   return { list, baseline, exact: older.length > 0 };
 }
 
@@ -709,9 +793,11 @@ function personRow(e, opts = {}) {
   const sub = opts.sub ? `<span>${esc(opts.sub)}</span>` : '';
   const chip = opts.chip || 'Voir';
   const av = state.demo ? `<div class="avatar photo">${faceImg(e.name)}</div>` : `<div class="avatar">${initial}</div>`;
-  return `<div class="person"><span class="sring">${av}</span><div class="who"><b>${esc(e.name)}</b>${sub}</div>${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
+  const ign = opts.ignorable ? `<button class="ignore" data-ignore="${esc(e.name)}" title="Normal qu'il ne me suive pas : ne plus compter ce compte">Ignorer</button>` : '';
+  return `<div class="person"><span class="sring">${av}</span><div class="who"><b>${esc(e.name)}</b>${sub}</div>${ign}${opts.check ? `<button class="check ${opts.done ? 'on' : ''}" data-done="${esc(e.name)}" aria-label="Marquer comme fait">${opts.done ? '✓' : ''}</button>` : ''}<a class="chip ${opts.chipClass || ''}" href="https://www.instagram.com/${encodeURIComponent(e.name)}/" target="_blank" rel="noopener">${chip}</a></div>`;
 }
 function lockedRow(i) { const w = 45 + ((i * 37) % 40); return `<div class="person locked"><div class="avatar">·</div><div class="who"><div class="bar" style="width:${w}%"></div><div class="bar s"></div></div><span class="chip">Abonné(e)</span></div>`; }
+function notIgnored(items) { const ig = store.get('lacheurs:ignore:' + state.account, {}); return items.filter(e => !ig[e.name]); }
 function renderList(items, subFn, emptyMsg, extra = () => ({})) {
   if (!items.length) return `<div class="empty"><b>${emptyMsg}</b></div>`;
   const free = state.premium ? items : items.slice(0, CONFIG.freeNames);
@@ -734,9 +820,11 @@ function renderPanel() {
     let head;
     if (!r.baseline) head = `<div class="card stack"><h3>Ta liste d'abonnés est enregistrée.</h3><p class="muted">Instagram ne garde pas la trace des désabonnements, donc personne ne peut te montrer le passé. À partir de maintenant, Lâcheurs compare chaque nouvel import avec celui-ci. Tu as déjà téléchargé tes données un jour ? Dépose cet ancien fichier avec celui-ci : tu verras tout de suite qui est parti. Sinon, reviens dans quelques semaines avec un nouveau fichier.</p><button class="btn block" id="btnRemind2">Me rappeler dans 30 jours</button></div>`;
     else head = `<p class="small muted">${r.exact ? `Comparé à ton import du ${fmtDate(r.baseline.date)}.` : `Ton import le plus ancien date du ${fmtDate(r.baseline.date)} (${since(r.baseline.date)}), la comparaison se fait depuis cette date.`}</p>`;
-    panel.innerHTML = filters + head + (r.baseline ? renderList(r.list, e => e.wasFollowing ? 'Tu le suis encore' : 'Tu ne le suivais pas', 'Personne ne t\'a lâché sur cette période.', e => ({ chip: 'Parti', chipClass: 'red' })) : '');
+    const sub = e => { const when = `Parti entre le ${fmtDateShort(e.from)} et le ${fmtDateShort(e.to)}`; return e.since ? `Te suivait depuis ${since(e.since).replace('il y a ', '')} · ${when}` : when; };
+    panel.innerHTML = filters + head + (r.baseline ? renderList(r.list, sub, 'Personne ne t\'a lâché sur cette période.', e => ({ chip: 'Parti', chipClass: 'red', ignorable: true })) : '');
   } else if (tab === 'sansretour') {
-    panel.innerHTML = `<p class="small muted">Tu les suis, ils ne te suivent pas. Les plus anciens en premier.</p>` + renderList(a.sansRetour, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : 'Ne te suit pas en retour', 'Tout le monde te suit en retour.', () => ({ chip: 'Abonné(e)' }));
+    const ignN = a.sansRetour.length - notIgnored(a.sansRetour).length;
+    panel.innerHTML = `<p class="small muted">Tu les suis, ils ne te suivent pas. Les plus anciens en premier.${ignN ? ` <button class="ignore" id="btnUnignore">${plural(ignN, 'compte ignoré', 'comptes ignorés')} · tout réafficher</button>` : ''}</p>` + renderList(notIgnored(a.sansRetour), e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : 'Ne te suit pas en retour', 'Tout le monde te suit en retour.', () => ({ chip: 'Abonné(e)', ignorable: true }));
   } else if (tab === 'fans') {
     panel.innerHTML = `<p class="small muted">Ils te suivent, tu ne les suis pas. Les plus récents en premier.</p>` + renderList(a.fans, e => e.ts ? `Te suit depuis ${since(e.ts)}` : 'Te suit', 'Pas de fan pour l\'instant.', () => ({ chip: 'Suivre en retour', chipClass: 'blue' }));
   } else if (tab === 'jamais') {
@@ -745,7 +833,7 @@ function renderPanel() {
     panel.innerHTML = renderHistory(a);
   } else if (tab === 'nettoyage') {
     const done = store.get('lacheurs:done:' + state.account, {});
-    const items = a.sansRetour;
+    const items = notIgnored(a.sansRetour);
     const remaining = items.filter(e => !done[e.name]).length;
     const intro = `<div class="card stack"><h3>Nettoyage guidé</h3><p class="muted">« Abonné(e) » ouvre le profil dans Instagram. Tu te désabonnes toi-même, puis tu coches. Lâcheurs ne fait jamais d'action à ta place : c'est ce qui protège ton compte.</p><p class="small"><b class="num">${remaining}</b> <span class="muted">restants sur ${items.length}</span></p></div>`;
     panel.innerHTML = intro + (state.premium ? renderList(items, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : '', 'Rien à nettoyer.', e => ({ check: true, done: !!done[e.name], chip: 'Abonné(e)' })) : renderList(items, e => e.ts ? `Tu le suis depuis ${since(e.ts)}` : '', 'Rien à nettoyer.', () => ({ check: true, chip: 'Abonné(e)' })));
@@ -815,11 +903,38 @@ function drawShareCard(a) {
   const dl = $('#btnDlImg'); if (dl) { try { dl.href = c.toDataURL('image/png'); } catch {} }
 }
 
+/* ---------- quiz (3 questions, prépare le guide et l'onglet d'ouverture) ---------- */
+const quiz = { step: 1, answers: {} };
+function startQuiz() { quiz.step = 1; quiz.answers = {}; $$('.qstep').forEach(q => q.hidden = q.dataset.q !== '1'); $('#qbar').style.width = '25%'; $('#quizSkip').hidden = false; show('viewQuiz'); }
+function quizAnswer(btn) {
+  const [k, v] = btn.dataset.a.split(':'); quiz.answers[k] = v; btn.classList.add('on');
+  setTimeout(() => {
+    quiz.step++; $$('.qstep').forEach(q => q.hidden = q.dataset.q !== String(quiz.step)); $('#qbar').style.width = (quiz.step * 25) + '%';
+    if (quiz.step === 4) {
+      store.set('lacheurs:quiz', quiz.answers); $('#quizSkip').hidden = true;
+      const g = { sansretour: 'ceux qui ne te suivent pas en retour', lacheurs: 'ceux qui se sont désabonnés', fans: 'ceux qui te suivent sans retour', jamais: 'ceux qui ne t\'ont jamais accepté' }[quiz.answers.goal] || 'tes listes';
+      let txt = `On ouvrira directement sur ${g}.`;
+      if (quiz.answers.old === 'yes' || quiz.answers.old === 'maybe') txt += ' Dépose ton ancien fichier avec le nouveau : tu verras qui est parti entre les deux.';
+      else if (quiz.answers.goal === 'lacheurs') txt += ' Premier import = point de départ. Au prochain, tu verras exactement qui est parti.';
+      if (quiz.answers.size === 'xl') txt += ' Avec plus de 10 000 abonnés, le fichier peut mettre plus longtemps à arriver.';
+      $('#quizText').textContent = txt;
+    }
+  }, 220);
+}
+function showWait() {
+  const w = store.get('lacheurs:wait', null); const b = $('#waitBanner'); if (!w || !w.at || state.data) { if (b) b.hidden = true; return; }
+  const m = Math.round((Date.now() - w.at) / 60000);
+  $('#waitText').textContent = m < 1 ? 'Ça prend souvent quelques minutes.' : m < 60 ? `Demande faite il y a ${plural(m, 'minute', 'minutes')}.` : `Demande faite ${since(w.at)}.`;
+  b.hidden = false;
+}
+function refreshCounts() { const a = state.data; if (!a) return; const r = computeLacheurs(a, state.snapshots, state.period); $('#tLacheurs').textContent = r.baseline ? r.list.length : '–'; $('#tSansRetour').textContent = notIgnored(a.sansRetour).length; }
+
 /* ---------- dashboard flow ---------- */
 function openDashboard(exports, demo = false) {
   if (!exports.length) { showImportError("Je n'ai trouvé ni abonnés ni abonnements dans ce fichier. Vérifie que tu as bien coché « Abonnés et abonnements » dans Instagram, puis dépose le .zip reçu."); return; }
   const latest = exports[exports.length - 1];
   const a = analyze(latest.buckets);
+  if (!demo) store.del('lacheurs:wait');
   state.data = a; state.demo = demo; state.account = (latest.buckets.username || exports.find(e => e.buckets.username)?.buckets.username || (demo ? 'demo' : 'moncompte')).toLowerCase();
   state.currentDate = latest.date; state.currentDay = dayOf(latest.date);
   if (demo) state.snapshots = demoSnapshots(a);
@@ -831,9 +946,10 @@ function openDashboard(exports, demo = false) {
   $('#snapInfo').textContent = (prior.length ? `${plural(prior.length, 'import précédent', 'imports précédents')}` : 'Premier import') + when;
   const r = computeLacheurs(a, state.snapshots, state.period);
   if (r.baseline) countUp($('#tLacheurs'), r.list.length); else $('#tLacheurs').textContent = '–';
-  countUp($('#tSansRetour'), a.sansRetour.length); countUp($('#tFans'), a.fans.length); countUp($('#tJamais'), a.jamais.length);
+  countUp($('#tSansRetour'), notIgnored(a.sansRetour).length); countUp($('#tFans'), a.fans.length); countUp($('#tJamais'), a.jamais.length);
   $('#btnMyData').hidden = false;
-  state.tab = r.baseline && r.list.length ? 'lacheurs' : 'sansretour';
+  const goal = store.get('lacheurs:quiz', {}).goal;
+  state.tab = goal === 'lacheurs' ? (r.baseline ? 'lacheurs' : 'sansretour') : (goal || (r.baseline && r.list.length ? 'lacheurs' : 'sansretour'));
   show('viewDash'); renderPanel();
 }
 function showImportError(msg) { const e = $('#importErr'); e.textContent = msg; e.hidden = false; $('#prog').hidden = true; }
@@ -950,7 +1066,12 @@ const LEGAL = {
 /* ---------- events ---------- */
 document.addEventListener('click', (ev) => {
   const t = ev.target.closest('button, a'); if (!t) return;
-  if (t.id === 'ctaStart' || t.id === 'btnReimport' || t.dataset.go === 'viewImport') { show('viewImport'); return; }
+  if (t.id === 'ctaStart') { if (store.get('lacheurs:quiz', null)) show('viewImport'); else startQuiz(); return; }
+  if (t.id === 'btnReimport' || t.dataset.go === 'viewImport') { show('viewImport'); return; }
+  if (t.classList.contains('qopt')) { quizAnswer(t); return; }
+  if (t.id === 'btnOpenIg') { const q = store.get('lacheurs:wait', {}); q.at = Date.now(); store.set('lacheurs:wait', q); setTimeout(showWait, 800); return; }
+  if (t.dataset.ignore != null) { const k = 'lacheurs:ignore:' + state.account; const d = store.get(k, {}); d[t.dataset.ignore] = true; store.set(k, d); toast('Compte ignoré'); refreshCounts(); renderPanel(); return; }
+  if (t.id === 'btnUnignore') { store.del('lacheurs:ignore:' + state.account); refreshCounts(); renderPanel(); return; }
   if (t.id === 'brandLink') { ev.preventDefault(); show(state.data ? 'viewDash' : 'viewLanding'); return; }
   if (t.id === 'btnDemo') { openDashboard([{ date: Date.now(), buckets: demoBuckets() }], true); return; }
   if (t.dataset.tab) { state.tab = t.dataset.tab; renderPanel(); $('#panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
@@ -993,11 +1114,14 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePaywa
     const els = $$('.rv'); els.forEach(el => el.classList.add('pre'));
     const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.remove('pre'); en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
     els.forEach(el => io.observe(el));
-    setTimeout(() => els.forEach(el => { el.classList.remove('pre'); el.classList.add('in'); }), 2500);
+    setTimeout(() => { els.forEach(el => { el.classList.remove('pre'); el.classList.add('in'); }); $$('[data-count]').forEach(el => { if (el.textContent === '0') { countUp(el, +el.dataset.count, 1100); cio.unobserve(el); } }); }, 2500);
     const cio = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { countUp(en.target, +en.target.dataset.count, 1100); cio.unobserve(en.target); } }));
     $$('[data-count]').forEach(el => cio.observe(el));
   } else { $$('[data-count]').forEach(el => el.textContent = el.dataset.count); }
   $$('[data-face]').forEach(el => { el.innerHTML = faceImg('face-' + el.dataset.face); });
+  const w = store.get('lacheurs:wait', null); if (w && w.at && Date.now() - w.at > 3 * 60000) $('#returnBanner').hidden = false;
+  // Compteur d'exemple : 512 → 509, en boucle, synchronisé avec le badge −3
+  const dd = $('#ddNum'); if (dd && !reduceMotion) { const cyc = () => { dd.textContent = '512'; setTimeout(() => dd.textContent = '511', 2500); setTimeout(() => dd.textContent = '510', 2900); setTimeout(() => dd.textContent = '509', 3300); }; cyc(); setInterval(cyc, 6000); } else if (dd) dd.textContent = '509';
   updateSticky();
 })();
 </script>
